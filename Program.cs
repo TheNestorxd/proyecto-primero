@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
+using CasillaNS;
 class Program
 {
     public static void Main(string[] args)
@@ -8,30 +9,36 @@ class Program
             // Variables----------------------------------------------
             // 0 es camino , 1 es pared , 3 es limite
                      
-             int paredesTotales = 60;                    
+                 
+            const int CASILLA_X_SIZE = 20;
+            const int CASILLA_Y_SIZE = 20;
             Random numeroAleatorio = new Random();
-            int aleatorio = 0;        
-            int[,] Laberinto = new int[20, 20];           
+            int aleatorio = 0;                    
+            Casilla[,] Laberinto = new Casilla[CASILLA_X_SIZE,CASILLA_Y_SIZE];
+            Casilla  c= new Casilla();
+        
+            //Casilla casilla = new Casilla();
+
             //--------------------------------------------------------
 
             // Creaccion de limites--------------------------------------------- OK
             crearLimites(Laberinto);           
             //----------------------------------------------------------------------
-            var canvas = new Canvas(Laberinto.GetLength(0), Laberinto.GetLength(1));
+            
                                                  
             // colocar paredes-----------------------------------OK
-            colocarParedes(Laberinto , paredesTotales);                             
+            colocarParedes(Laberinto , 60);                             
             //----------------------------------------------------
 
             //impedir encerronas------------
-            for(int j = 1; j < Laberinto.GetLength(1) - 1; j++)
-            for(int i = 1; j < Laberinto.GetLength(0) - 1; i++)
-            {
-                if(Laberinto[i,j] == 0)
-                {
-                    desbloquearTodo(Laberinto , i , j);
-                }
-            }
+            // for(int j = 1; j < Laberinto.GetLength(1) - 1; j++)
+            // for(int i = 1; j < Laberinto.GetLength(0) - 1; i++)
+            // {
+            //     if(Laberinto[i,j] == 0)
+            //     {
+            //         desbloquearTodo(Laberinto , i , j);
+            //     }
+            // }
             
                                      
             // Contador de paredes-----------------------------
@@ -43,6 +50,7 @@ class Program
                 // }
             //---------------------------------------------------
             //Dibujado y creaccion del canvas para mostrarlo en la consola-------- OK
+                var canvas = new Canvas(Laberinto.GetLength(0), Laberinto.GetLength(1));
                 for(int j = 0; j < Laberinto.GetLength(1); j++)            
                 for(int i = 0; i < Laberinto.GetLength(0); i++)
                 {
@@ -62,32 +70,37 @@ class Program
 
         } 
 
-        static void crearLimites(int[,] Laberinto)
+        static void crearLimites(Casilla[,] casilla)
         {
-            for(int i = 0; i < Laberinto.GetLength(0); i++) //cerrando laterales
+            for(int i = 0; i < casilla.GetLength(0); i++) //cerrando laterales
             {
-                Laberinto[i,0] = 3;                                                   
-                Laberinto[i,Laberinto.GetLength(1) - 1] = 3;
+                casilla[i,0].tipoCasilla = TipoCasilla.limite;                                                   
+                casilla[i,casilla.GetLength(1) - 1].tipoCasilla = TipoCasilla.limite;
             }
-            for(int i = 0; i < Laberinto.GetLength(1) ; i++) //cerrando arriba y abajo
+            for(int i = 0; i < casilla.GetLength(1) ; i++) //cerrando arriba y abajo
             {
-                Laberinto[0,i] = 3;
-                Laberinto[Laberinto.GetLength(0) - 1,i] = 3;
+                casilla[0,i].tipoCasilla = TipoCasilla.limite;
+                casilla[casilla.GetLength(0) - 1,i].tipoCasilla = TipoCasilla.limite;
             }
         }
+        
 
-        static void colocarParedes(int[,] Laberinto , int paredesTotales)
+        static void colocarParedes(Casilla[,] Laberinto , int paredesTotales)
         {
             int x = 0;
-            int y = 0;            
+            int y = 0;   
+              
             Random numeroAleatorio = new Random();
             for(int i = 0; i < paredesTotales ; i++) 
             {                             
-                x = numeroAleatorio.Next(1, Laberinto.GetLength(0) - 1);
-                y = numeroAleatorio.Next(1, Laberinto.GetLength(1) - 1);
-                Laberinto[x,y] = 1;                                                                 
+                x = numeroAleatorio.Next(1, Laberinto.GetLength(0) - 2);
+                y = numeroAleatorio.Next(1, Laberinto.GetLength(1) - 2);
+                Laberinto[x,y].tipoCasilla = TipoCasilla.pared;                                                                 
             }
         }
+
+        
+
 
         static void desbloquearTodo(int[,] Laberinto , int i , int j)
         {                        
