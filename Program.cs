@@ -10,8 +10,7 @@ class Program
             // Variables----------------------------------------------                                                                                  
             const int CASILLA_X_SIZE = 30;
             const int CASILLA_Y_SIZE = 20;
-            Random numeroAleatorio = new Random();
-            int aleatorio = 0;                    
+            Random numeroAleatorio = new Random();                                
             Casilla[,] Laberinto = new Casilla[CASILLA_X_SIZE,CASILLA_Y_SIZE];
             //============instanciando========================
             for (int i = 0; i < CASILLA_X_SIZE; i++)
@@ -27,11 +26,7 @@ class Program
             juego(Laberinto);
             
             //generarJugador(Laberinto); 
-
-            //=========Juego==========================                                                                                                                                                                     
-                render(Laberinto); 
-                Thread.Sleep(500); 
-            //=========================================                    
+                              
                                     
         } 
     //================Dibujado del mapa=============================
@@ -141,41 +136,65 @@ class Program
         var resultado = buscarJugador(Mapa);
         int posicion_x = resultado.Item1;
         int posicion_y = resultado.Item2;     
-        int velocidad = 4;
+        int velocidad = 100;
                         
         while(velocidad > 0)
         {
             ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
             switch(teclaPresionada.Key)
             {
-                case ConsoleKey.W:
+                //izquierda
+                case ConsoleKey.A:
                 if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino)
                 {
                    Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
+                   Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
+                   buscarJugador(Mapa);
+                   resultado = buscarJugador(Mapa);
+                   posicion_x = resultado.Item1;
+                   posicion_y = resultado.Item2; 
                    render(Mapa);
                    velocidad --;
-                }                    
+                }   
+                //derecha                 
                     break;
-                case ConsoleKey.S:                
+                case ConsoleKey.D:                
                 if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino)
                 {
                    Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
+                   Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
+                   buscarJugador(Mapa);
+                   resultado = buscarJugador(Mapa);
+                   posicion_x = resultado.Item1;
+                   posicion_y = resultado.Item2;
                    render(Mapa);
                    velocidad --;
-                }  
+                }
+                //arriba  
                     break;
-                case ConsoleKey.A:
+                case ConsoleKey.W:
                 if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino)
                 {
                    Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador;
+                   Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
+                   buscarJugador(Mapa);
+                   resultado = buscarJugador(Mapa);
+                   posicion_x = resultado.Item1;
+                   posicion_y = resultado.Item2;
                    render(Mapa);
                    velocidad --;
-                } 
+                }
+                //abajo 
                     break;
-                case ConsoleKey.D:
+                case ConsoleKey.S:
                 if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino)
                 {
                    Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador;
+                   Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
+                   buscarJugador(Mapa);
+                   resultado = buscarJugador(Mapa);
+                   posicion_x = resultado.Item1;
+                   posicion_y = resultado.Item2;
                    render(Mapa);
                    velocidad --;
                 } 
