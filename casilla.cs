@@ -4,19 +4,18 @@ namespace CasillaNS
     {
         camino,
         pared,
-        limite,
-        meta,
+        limite,        
+        jugador,
     }
     public class Casilla
     {
         //Vars
         public TipoCasilla tipoCasilla = TipoCasilla.camino;
-        public bool alcanzable = false;
+        
         public Trampa trampa= new Trampa();
 
         //Funct
-        public Casilla(){
-        }
+        
         
     }
     
@@ -29,7 +28,7 @@ namespace CasillaNS
 
      public class Trampa
     {
-        public TipoTrampa tipoTrapa = TipoTrampa.dardos;
+        public TipoTrampa tipoTrampa = TipoTrampa.dardos;
 
     }
 }

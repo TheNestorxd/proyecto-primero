@@ -2,76 +2,56 @@
 using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
 using CasillaNS;
+using PersonajeNS;
 class Program
 {
     public static void Main(string[] args)
     {
-            // Variables----------------------------------------------
-            // 0 es camino , 1 es pared , 3 es limite
-                     
-                 
-            const int CASILLA_X_SIZE = 20;
+            // Variables----------------------------------------------                                                                                  
+            const int CASILLA_X_SIZE = 30;
             const int CASILLA_Y_SIZE = 20;
             Random numeroAleatorio = new Random();
             int aleatorio = 0;                    
             Casilla[,] Laberinto = new Casilla[CASILLA_X_SIZE,CASILLA_Y_SIZE];
+            //============instanciando========================
             for (int i = 0; i < CASILLA_X_SIZE; i++)
                 for (int j = 0; j < CASILLA_Y_SIZE; j++)
-                    Laberinto[i,j] = new Casilla();
+                    Laberinto[i,j] = new Casilla(); 
 
-            //Casilla casilla = new Casilla();
-
-            //--------------------------------------------------------
-
-            // Creaccion de limites--------------------------------------------- OK
-            crearLimites(Laberinto);           
-            //----------------------------------------------------------------------
+            //============Creacion del Mapa=========================
             
-                                                 
-            // colocar paredes-----------------------------------OK
-            colocarParedes(Laberinto , 60);                             
-            //----------------------------------------------------
-
-            //impedir encerronas------------
-            // for(int j = 1; j < Laberinto.GetLength(1) - 1; j++)
-            // for(int i = 1; j < Laberinto.GetLength(0) - 1; i++)
-            // {
-            //     if(Laberinto[i,j] == 0)
-            //     {
-            //         desbloquearTodo(Laberinto , i , j);
-            //     }
-            // }
+            crearLimites(Laberinto);                                                                                                
+            colocarParedes(Laberinto , 100);
+            generarJugador(Laberinto);
+            Graph(Laberinto);
+            juego(Laberinto);
             
-                                     
-            // Contador de paredes-----------------------------
-                //for(int j = 1; j < Laberinto.GetLength(1) -1; j++) 
-                //for(int i = 1; i < Laberinto.GetLength(0) -1; i++)
-                //{
-                //    if(Laberinto[i,j] == 1)
-                //    {paredesTotales = paredesTotales - 1;}
-                // }
-            //---------------------------------------------------
-            //Dibujado y creaccion del canvas para mostrarlo en la consola-------- OK
-            Graph(Laberinto);            
-            //-----------------------------------
+            //generarJugador(Laberinto); 
 
-            //Jugabilidad-------------------------
-
-            //------------------------------------
-
+            //=========Juego==========================                                                                                                                                                                     
+                render(Laberinto); 
+                Thread.Sleep(500); 
+            //=========================================                    
+                                    
         } 
-
-    static void crearLimites(Casilla[,] casilla)
+    //================Dibujado del mapa=============================
+    static void render (Casilla [,] Mapa){
+        
+        Console.Clear();
+        Graph(Mapa); 
+    }
+    //===============================================================
+    static void crearLimites(Casilla[,] Mapa)
     {
-        for(int i = 0; i < casilla.GetLength(0); i++) //cerrando laterales
+        for(int i = 0; i < Mapa.GetLength(0); i++) //cerrando laterales
         {
-            casilla[i,0].tipoCasilla = TipoCasilla.limite;                                                   
-            casilla[i,casilla.GetLength(1) - 1].tipoCasilla = TipoCasilla.limite;
+            Mapa[i,0].tipoCasilla = TipoCasilla.limite;                                                   
+            Mapa[i,Mapa.GetLength(1) - 1].tipoCasilla = TipoCasilla.limite;
         }
-        for(int i = 0; i < casilla.GetLength(1) ; i++) //cerrando arriba y abajo
+        for(int i = 0; i < Mapa.GetLength(1) ; i++) //cerrando arriba y abajo
         {
-            casilla[0,i].tipoCasilla = TipoCasilla.limite;
-            casilla[casilla.GetLength(0) - 1,i].tipoCasilla = TipoCasilla.limite;
+            Mapa[0,i].tipoCasilla = TipoCasilla.limite;
+            Mapa[Mapa.GetLength(0) - 1,i].tipoCasilla = TipoCasilla.limite;
         }
     }
     
@@ -88,7 +68,7 @@ class Program
             {
                 x = numeroAleatorio.Next(1, Laberinto.GetLength(0) - 2);
                 y = numeroAleatorio.Next(1, Laberinto.GetLength(1) - 2);
-                
+
             }while(Laberinto[x,y].tipoCasilla != TipoCasilla.camino);
 
             Laberinto[x,y].tipoCasilla = TipoCasilla.pared;                                                                 
@@ -109,115 +89,103 @@ class Program
                     canvas.SetPixel(i, j, Color.White);
                     
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.limite)
-                    canvas.SetPixel(i, j, Color.Red);
+                    canvas.SetPixel(i, j, Color.Grey);
+                if(Laberinto[i,j].tipoCasilla == TipoCasilla.jugador)
+                    canvas.SetPixel(i, j, Color.Blue);
+                
             }
         AnsiConsole.Write(canvas);  
     }
 
     static void desbloquearTodo(int[,] Laberinto , int i , int j)
     {                        
-        List<int> coordenadaI = new List<int>();
-        List<int> coordenadaJ = new List<int>();
-        int x = i;
-        int y = j;   
-        //Creacion de un mapa aparte donde se marcaran las casillas visitadas--------
-            int[,] Tablero = new int[20,20];
-            for(int b = 0; b < Tablero.GetLength(1); b++)
-            for(int a = 0; a < Tablero.GetLength(0); a++)
+        
+    }
+
+    static void generarJugador(Casilla[,] Mapa)
+    {
+        bool NoColocado = true;
+        int x = 0;
+        int y = 0;
+        Random numeroAleatorio = new Random();
+        while(NoColocado)
+        {
+            do
             {
-                Tablero[a,b] = Laberinto[a,b];
-            }
-            //---------------------------------------------------------------------------
-            while(coordenadaI.Count > 0 && coordenadaJ.Count > 0)
+                x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 2);
+                y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 2);
+
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+            Mapa[x,y].tipoCasilla = TipoCasilla.jugador;
+            NoColocado = false;
+
+
+        }
+    }
+
+    static (int,int) buscarJugador(Casilla[,] Mapa)
+    {
+        for(int j = 1; j < Mapa.GetLength(1) ; j++)
+        for(int i = 1; i < Mapa.GetLength(0) ; i++)
+        {
+            if(Mapa[i,j].tipoCasilla == TipoCasilla.jugador)
+            return ( i, j);
+            
+        }
+        return (0,0);
+    }
+    
+
+    static void juego(Casilla[,] Mapa)
+    {     
+        var resultado = buscarJugador(Mapa);
+        int posicion_x = resultado.Item1;
+        int posicion_y = resultado.Item2;     
+        int velocidad = 4;
+                        
+        while(velocidad > 0)
+        {
+            ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
+            switch(teclaPresionada.Key)
             {
-                x = coordenadaI[0];
-                y = coordenadaJ[0];
-                //arriba
-                if(Tablero[x - 1,y] != 2 && Laberinto[x - 1, y] == 0)
+                case ConsoleKey.W:
+                if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino)
                 {
-                    coordenadaI.Add(x - 1);
-                    coordenadaJ.Add(y);
-                }
-                //abajo
-                if(Tablero[x + 1,y] != 2 && Laberinto[x + 1, y] == 0)
+                   Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
+                   render(Mapa);
+                   velocidad --;
+                }                    
+                    break;
+                case ConsoleKey.S:                
+                if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino)
                 {
-                    coordenadaI.Add(x + 1);
-                    coordenadaJ.Add(y);
-                }
-                //izquierda
-                if(Tablero[x,y - 1] != 2 && Laberinto[x, y - 1] == 0)
+                   Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
+                   render(Mapa);
+                   velocidad --;
+                }  
+                    break;
+                case ConsoleKey.A:
+                if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino)
                 {
-                    coordenadaI.Add(x);
-                    coordenadaJ.Add(y - 1);
-                }
-                //derecha
-                if(Tablero[x,y + 1] != 2 && Laberinto[x, y + 1] == 0)
+                   Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador;
+                   render(Mapa);
+                   velocidad --;
+                } 
+                    break;
+                case ConsoleKey.D:
+                if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino)
                 {
-                    coordenadaI.Add(x);
-                    coordenadaJ.Add(y + 1);
-                }
-                //marcar como visitada y borrarla de la lista
-                Tablero[x,y] = 2;
-                coordenadaI.RemoveAt(0);
-                coordenadaJ.RemoveAt(0);
+                   Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador;
+                   render(Mapa);
+                   velocidad --;
+                } 
+                    break;
+
             }
-            //Recorrido en busca de caminos no visitados
-            for(int b = 0; b < Tablero.GetLength(1); b++)
-            for(int a = 0; a < Tablero.GetLength(0); a++)
-            {
-                if(Tablero[a,b] == 0)
-                {
-                    for(int c = 1; c < Laberinto.GetLength(0) - 1; c++)
-                    {
-                        Laberinto[c,b] = 0;
-                    }
-                    for(int c = 1; c < Laberinto.GetLength(1) - 1; c++)
-                    {
-                        Laberinto[a,c] = 0;
-                    }
-                    
-                }
-            }
+
         }
 
-
-    static void juego()
-    {
-
     }
 
-    public enum personajes
-    {
-
-    }
-            
-    
-    
-    
-
-
-
-                
-                
-                                               
-        
-                                                                                
-}
-
-class Personaje
-{
-    
-    
-    public Personaje()
-    {
-       int vida;
-       int velocidad;
-
-    }
-
-}
-
-
-
-             
-        
+                                                                                                                                                            
+}                     
