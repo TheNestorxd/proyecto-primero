@@ -6,6 +6,7 @@ namespace CasillaNS
         pared,
         limite,        
         jugador,
+        jugador2,
     }
     public class Casilla
     {
