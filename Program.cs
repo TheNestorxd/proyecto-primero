@@ -3,6 +3,9 @@ using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
 using CasillaNS;
 using PersonajeNS;
+
+namespace Principal
+{
 class Program
 {
     public static void Main(string[] args)
@@ -10,7 +13,10 @@ class Program
         // Variables----------------------------------------------                                                                                  
         const int CASILLA_X_SIZE = 50;
         const int CASILLA_Y_SIZE = 20;
-        int jugador = 0;
+        TipoPersonaje jugador1Personaje = TipoPersonaje.Halvar;
+        TipoPersonaje jugador2Personaje = TipoPersonaje.Zara;
+        int jugador = 1;
+        TipoPersonaje jugadorPersonaje = jugador1Personaje;
         Random numeroAleatorio = new Random();                                
         Casilla[,] Laberinto = new Casilla[CASILLA_X_SIZE,CASILLA_Y_SIZE];
         //============instanciando========================
@@ -23,19 +29,24 @@ class Program
         crearLimites(Laberinto);                                                                                                
         colocarParedes(Laberinto , 100);
         generarJugadores(Laberinto);
-        Dibujar(Laberinto);
+        render(Laberinto);
         
-        //============Jugabilidad=========================
-        jugador = 1;
+        //============Jugabilidad=========================   
         while(true)
         {
-          jugarTurno(Laberinto , jugador);
+
+          jugarTurno(Laberinto , jugador , jugadorPersonaje);
           if(jugador == 1)
           {
-             jugador = 2;             
+             jugador = 2;
+             jugadorPersonaje = jugador2Personaje;             
           }
           else if(jugador == 2)
-             jugador = 1;                                        
+          {
+            jugador = 1;
+            jugadorPersonaje = jugador1Personaje; 
+          }
+                                                     
         }                                                                                  
     } 
     //================Dibujado del mapa=============================
@@ -135,7 +146,7 @@ class Program
         }
     }
 
-    static (int,int) buscarJugador(Casilla[,] Mapa , int jugador)
+    public static (int,int) buscarJugador(Casilla[,] Mapa , int jugador)
     {
         for(int j = 1; j < Mapa.GetLength(1) ; j++)
         for(int i = 1; i < Mapa.GetLength(0) ; i++)
@@ -147,9 +158,134 @@ class Program
         }
         return (0,0);
     }
+
+    public static Casilla[,]  usarHabilidad(TipoPersonaje tipo , Casilla[,] Mapa , int jugador)
+    {
+      int posicion_x;
+      int posicion_y;
+      if(tipo == TipoPersonaje.Zara)
+      {
+        bool habilidadNoUsada = true;
+        var resultado = buscarJugador(Mapa , 2);
+         posicion_x = resultado.Item1;
+         posicion_y = resultado.Item2;
+         Console.WriteLine("Zara : Estas paredes estorban(pulsa hacia donde ira su habilidad)");
+         
+
+         while(habilidadNoUsada)
+         {
+         ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
+         switch(teclaPresionada.Key)
+         {
+          case ConsoleKey.A:
+          if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.pared)
+          {
+            Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.camino;
+            render(Mapa);
+            habilidadNoUsada = false;
+            if(jugador == 1)
+            Globales.enfriamiento1 = 2;
+            if(jugador == 2)
+            Globales.enfriamiento2 = 2;            
+          }
+          else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.limite)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            return Mapa;
+          }
+          else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: No hay nada que derribar aqui");
+            return Mapa;
+          }
+          break;
+          case ConsoleKey.D:
+          if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.pared)
+          {
+            Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.camino;
+            render(Mapa);
+            habilidadNoUsada = false;
+            if(jugador == 1)
+            Globales.enfriamiento1 = 2;
+            if(jugador == 2)
+            Globales.enfriamiento2 = 2;
+          }
+          else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.limite)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            return Mapa;
+          }
+          else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: No hay nada que derribar aqui");
+            return Mapa;
+          }
+          break;
+          case ConsoleKey.W:
+          if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.pared)
+          {
+            Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.camino;
+            render(Mapa);
+            habilidadNoUsada = false;
+            if(jugador == 1)
+            Globales.enfriamiento1 = 2;
+            if(jugador == 2)
+            Globales.enfriamiento2 = 2;
+          }
+          else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.limite)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            return Mapa;
+          }
+          else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: No hay nada que derribar aqui");
+            return Mapa;
+          }
+          break; 
+          case ConsoleKey.S:
+          if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.pared)
+          {
+            Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.camino;
+            render(Mapa);
+            habilidadNoUsada = false;
+            if(jugador == 1)
+            Globales.enfriamiento1 = 2;
+            if(jugador == 2)
+            Globales.enfriamiento2 = 2;
+          }
+          else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.limite)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            return Mapa;
+          }
+          else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino)
+          {
+            render(Mapa);
+            Console.WriteLine("Zara: No hay nada que derribar aqui");
+            return Mapa;
+          }
+          break;
+          
+         }
+         }
+        
+         
+
+
+      }
+       return Mapa;
+    }
     
 
-    static void jugarTurno(Casilla[,] Mapa , int jugador)
+    static void jugarTurno(Casilla[,] Mapa , int jugador , TipoPersonaje personaje)
     {
       var resultado = buscarJugador(Mapa , 1);
       int posicion_x = 5;
@@ -159,15 +295,62 @@ class Program
       {     
          resultado = buscarJugador(Mapa , 1);
          posicion_x = resultado.Item1;
-         posicion_y = resultado.Item2;     
-         velocidad = 4;
+         posicion_y = resultado.Item2;
+         if(personaje == TipoPersonaje.Zara)
+         {
+           velocidad = 6;
+         }
+         else if(personaje == TipoPersonaje.Halvar)
+         {
+           velocidad = 4; 
+         }
+            else if(personaje == TipoPersonaje.Axton)
+         {
+           velocidad = 4; 
+         }
+          else if(personaje == TipoPersonaje.Ralof)
+         {
+           velocidad = 4; 
+         }
+          else if(personaje == TipoPersonaje.Sky)
+         {
+           velocidad = 5; 
+         }
+         else if(personaje == TipoPersonaje.Lyn)
+         {
+           velocidad = 7; 
+         }
+           
       }
       if(jugador == 2)
       {     
          resultado = buscarJugador(Mapa , 2);
          posicion_x = resultado.Item1;
-         posicion_y = resultado.Item2;     
-         velocidad = 4;         
+         posicion_y = resultado.Item2;
+          if(personaje == TipoPersonaje.Zara)
+         {
+           velocidad = 6;
+         }
+         else if(personaje == TipoPersonaje.Halvar)
+         {
+           velocidad = 4; 
+         }
+            else if(personaje == TipoPersonaje.Axton)
+         {
+           velocidad = 4; 
+         }
+          else if(personaje == TipoPersonaje.Ralof)
+         {
+           velocidad = 4; 
+         }
+          else if(personaje == TipoPersonaje.Sky)
+         {
+           velocidad = 5; 
+         }
+         else if(personaje == TipoPersonaje.Lyn)
+         {
+           velocidad = 7; 
+         }      
       }
       
                         
@@ -268,12 +451,50 @@ class Program
                    velocidad --;
                 } 
                     break;
+                case ConsoleKey.H:
+                if(Globales.enfriamiento1 == 0 && jugador == 1)
+                {
+                  if(personaje == TipoPersonaje.Zara)
+                {
+                  usarHabilidad(personaje, Mapa , jugador);
+                }
+                }
+                else if(Globales.enfriamiento2 == 0 && jugador == 2)
+                {
+                  if(personaje == TipoPersonaje.Zara)
+                {
+                  usarHabilidad(personaje, Mapa , jugador);
+                }
+                }
+                else if(Globales.enfriamiento1 > 0 || Globales.enfriamiento2 > 0)
+                {
+                  if(jugador == 1)
+                  Console.WriteLine("no puedes usar tu habilidad ahora , estara disponible en: " + Globales.enfriamiento1 + " turnos" );
+                  if(jugador == 2)
+                  Console.WriteLine("no puedes usar tu habilidad ahora , estara disponible en: " + Globales.enfriamiento2 + " turnos" );
+                }
+                break;
+                }
+                
 
             }
+        if(jugador == 1)
+        Globales.enfriamiento1 --;
+        if(jugador == 2)
+        Globales.enfriamiento2 --;
 
         }
+        
 
     }
+public static class Globales
+{
+  public static int enfriamiento1 = 0;
+  public static int enfriamiento2 = 0;
+}
 
                                                                                                                                                             
-}                     
+}
+
+
+                   

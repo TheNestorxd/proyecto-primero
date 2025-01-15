@@ -1,9 +1,19 @@
+using CasillaNS;
+using Principal;
+
 namespace PersonajeNS{
 
-    public abstract class Personaje
+    public enum TipoPersonaje
     {
-       
-        
+        Zara,
+        Halvar,
+        Axton,
+        Ralof,
+        Sky,
+        Lyn,
     }
+
+    
+    
 
 }
