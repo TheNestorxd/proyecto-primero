@@ -17,20 +17,17 @@ class Program
         TipoPersonaje jugador2Personaje = TipoPersonaje.Zara;
         int jugador = 1;
         TipoPersonaje jugadorPersonaje = jugador1Personaje;
-        Random numeroAleatorio = new Random();                                
-        Casilla[,] Laberinto = new Casilla[CASILLA_X_SIZE,CASILLA_Y_SIZE];
+        Random numeroAleatorio = new Random();        
+        Casilla[,] Laberinto = new Casilla[Globales.CASILLA_X_SIZE,Globales.CASILLA_Y_SIZE];
         //============instanciando========================
         for (int i = 0; i < CASILLA_X_SIZE; i++)
         for (int j = 0; j < CASILLA_Y_SIZE; j++)
-        Laberinto[i,j] = new Casilla(); 
-
+        Laberinto[i,j] = new Casilla();                                   
         //============Creacion del Mapa=========================
-            
-        crearLimites(Laberinto);                                                                                                
-        colocarParedes(Laberinto , 100);
-        generarJugadores(Laberinto);
-        render(Laberinto);
+        crearMapa(Laberinto);
         
+        
+                                          
         //============Jugabilidad=========================   
         while(true)
         {
@@ -47,8 +44,13 @@ class Program
             jugadorPersonaje = jugador1Personaje; 
           }
                                                      
-        }                                                                                  
-    } 
+        }    
+        }
+        
+        //============Agregado despues de terminar el mapa==========
+        
+                                                                                      
+ 
     //================Dibujado del mapa=============================
     static void render (Casilla [,] Mapa){
         
@@ -71,24 +73,42 @@ class Program
     }
     
 
-    static void colocarParedes(Casilla[,] Laberinto , int paredesTotales)
+    static void colocarParedes(Casilla[,] Mapa , int paredesTotales)
     {
         int x = 0;
-        int y = 0;   
+        int y = 0;
+        int ParedesTotales = paredesTotales;  
         
         Random numeroAleatorio = new Random();
-        for(int i = 0; i < paredesTotales ; i++) 
+        
+        
+        for(int i = 0; i < ParedesTotales ; i++) 
         {          
             do
             {
-                x = numeroAleatorio.Next(1, Laberinto.GetLength(0) - 2);
-                y = numeroAleatorio.Next(1, Laberinto.GetLength(1) - 2);
+                x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 2);
+                y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 2);
 
-            }while(Laberinto[x,y].tipoCasilla != TipoCasilla.camino);
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
 
-            Laberinto[x,y].tipoCasilla = TipoCasilla.pared;                                                                 
+            Mapa[x,y].tipoCasilla = TipoCasilla.pared;                                                                 
         
         }
+                                      
+    }
+        
+    
+
+    public static int contarParedes(Casilla[,] Mapa)
+    {
+      int contadorParedes = 0;
+      for(int j = 1; j < Globales.CASILLA_Y_SIZE - 1 ; j++)
+      for(int i = 1; i < Globales.CASILLA_X_SIZE - 1 ; i++)
+      {
+        if(Mapa[i,j].tipoCasilla == TipoCasilla.pared)
+        contadorParedes ++;
+      }
+      return contadorParedes;
     }
 
     
@@ -108,7 +128,7 @@ class Program
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.jugador)
                     canvas.SetPixel(i, j, Color.Blue);
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.jugador2)
-                    canvas.SetPixel(i, j, Color.Red);
+                    canvas.SetPixel(i, j, Color.Red);                
             }
         AnsiConsole.Write(canvas);  
     }
@@ -286,7 +306,7 @@ class Program
     
 
     static void jugarTurno(Casilla[,] Mapa , int jugador , TipoPersonaje personaje)
-    {
+    {      
       var resultado = buscarJugador(Mapa , 1);
       int posicion_x = 5;
       int posicion_y = 5;
@@ -355,7 +375,7 @@ class Program
       
                         
         while(velocidad > 0)
-        {
+        {         
             ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
             switch(teclaPresionada.Key)
             {
@@ -484,14 +504,115 @@ class Program
         Globales.enfriamiento2 --;
 
         }
-        
 
+    static void crearMapa(Casilla[,] Mapa)
+    {    
+      bool Completo = false;      
+      do{
+        for(int j = 0; j < Mapa.GetLength(1); j++)
+        for(int i = 0; i < Mapa.GetLength(0); i++)
+        {
+          Mapa[i,j].tipoCasilla = TipoCasilla.camino;
+        }
+        crearLimites(Mapa);
+        colocarParedes(Mapa , 200);
+        generarJugadores(Mapa);
+        Completo = EsConectado(Mapa);
+      }while(Completo == false);
+      solucionarError(Mapa);
+      render(Mapa);
+    }    
+
+
+
+
+    //===========Nuevo agregado por el DFS==========================
+
+     static bool EsConectado(Casilla[,] Mapa)
+    {
+        int filas = Mapa.GetLength(0);
+        int columnas = Mapa.GetLength(1);
+
+        Casilla[,] MapaCopia = (Casilla[,])Mapa.Clone();
+
+        // Encuentra la primera celda de camino
+        (int fila, int columna)? inicio = null;
+        for (int i = 1; i < filas - 1; i++)
+        {
+            for (int j = 1; j < columnas - 1; j++)
+            {
+                if (Mapa[i, j].tipoCasilla == TipoCasilla.camino)
+                {
+                    inicio = (i, j);
+                    break;
+                }
+            }
+            if (inicio.HasValue) break;
+        }
+
+        if (!inicio.HasValue) return true; // No hay caminos, por lo tanto están "conectados"
+
+        // Función DFS para explorar el mapa
+        void DFS(int x, int y)
+        {
+            if (x < 0 || x >= filas || y < 0 || y >= columnas || MapaCopia[x, y].tipoCasilla != TipoCasilla.camino)
+                return;
+
+            MapaCopia[x, y].tipoCasilla = TipoCasilla.caminovisitado; // Marcar como visitado
+
+            // Llamadas recursivas a las celdas adyacentes
+            DFS(x + 1, y); // Abajo
+            DFS(x - 1, y); // Arriba
+            DFS(x, y + 1); // Derecha
+            DFS(x, y - 1); // Izquierda
+        }
+
+        // Ejecutar DFS desde la celda inicial
+        DFS(inicio.Value.fila, inicio.Value.columna);
+
+        // Verificar si hay caminos no visitados
+        for (int i = 0; i < filas; i++)
+        {
+            for (int j = 0; j < columnas; j++)
+            {
+                if (MapaCopia[i, j].tipoCasilla == TipoCasilla.camino) // Encontrar un camino no visitado
+                    return false;
+            }
+        }
+        return true;
     }
+
+     static void solucionarError(Casilla[,] Mapa) 
+     {
+      for(int j = 1; j < Mapa.GetLength(1) - 1; j++)
+      for(int i = 1; i < Mapa.GetLength(0) - 1; i++)
+      {
+        if(Mapa[i, j].tipoCasilla == TipoCasilla.caminovisitado)
+        Mapa[i,j].tipoCasilla = TipoCasilla.camino;
+      }
+
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+  }
 public static class Globales
 {
   public static int enfriamiento1 = 0;
   public static int enfriamiento2 = 0;
+  public static int CASILLA_X_SIZE = 50;
+  public static int CASILLA_Y_SIZE = 20;
 }
+
 
                                                                                                                                                             
 }

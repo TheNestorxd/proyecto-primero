@@ -7,6 +7,7 @@ namespace CasillaNS
         limite,        
         jugador,
         jugador2,
+        caminovisitado,
     }
     public class Casilla
     {
