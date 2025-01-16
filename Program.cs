@@ -498,9 +498,9 @@ class Program
                 
 
             }
-        if(jugador == 1)
+        if(jugador == 1 && Globales.enfriamiento1 > 0)
         Globales.enfriamiento1 --;
-        if(jugador == 2)
+        if(jugador == 2 && Globales.enfriamiento2 > 0)
         Globales.enfriamiento2 --;
 
         }
