@@ -14,7 +14,9 @@ class Program
         const int CASILLA_X_SIZE = 50;
         const int CASILLA_Y_SIZE = 20;
         TipoPersonaje jugador1Personaje = TipoPersonaje.Halvar;
+        asignandoVelocidades(jugador1Personaje , 1);
         TipoPersonaje jugador2Personaje = TipoPersonaje.Zara;
+        asignandoVelocidades(jugador2Personaje , 2);
         int jugador = 1;
         TipoPersonaje jugadorPersonaje = jugador1Personaje;
         Random numeroAleatorio = new Random();        
@@ -121,14 +123,20 @@ class Program
                     canvas.SetPixel(i, j, Color.Black);
                 
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.pared)
-                    canvas.SetPixel(i, j, Color.White);
-                    
+                    canvas.SetPixel(i, j, Color.White);                    
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.limite)
                     canvas.SetPixel(i, j, Color.Grey);
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.jugador)
                     canvas.SetPixel(i, j, Color.Blue);
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.jugador2)
-                    canvas.SetPixel(i, j, Color.Red);                
+                    canvas.SetPixel(i, j, Color.Red);
+                if(Laberinto[i,j].tipoCasilla == TipoCasilla.trampavelocidad)
+                    canvas.SetPixel(i, j, Color.Pink1); 
+                if(Laberinto[i,j].tipoCasilla == TipoCasilla.trampateletransportacion)
+                    canvas.SetPixel(i, j, Color.Yellow);
+                if(Laberinto[i,j].tipoCasilla == TipoCasilla.trampaenfriamiento)
+                    canvas.SetPixel(i, j, Color.Green);  
+                      
             }
         AnsiConsole.Write(canvas);  
     }
@@ -316,30 +324,8 @@ class Program
          resultado = buscarJugador(Mapa , 1);
          posicion_x = resultado.Item1;
          posicion_y = resultado.Item2;
-         if(personaje == TipoPersonaje.Zara)
-         {
-           velocidad = 6;
-         }
-         else if(personaje == TipoPersonaje.Halvar)
-         {
-           velocidad = 4; 
-         }
-            else if(personaje == TipoPersonaje.Axton)
-         {
-           velocidad = 4; 
-         }
-          else if(personaje == TipoPersonaje.Ralof)
-         {
-           velocidad = 4; 
-         }
-          else if(personaje == TipoPersonaje.Sky)
-         {
-           velocidad = 5; 
-         }
-         else if(personaje == TipoPersonaje.Lyn)
-         {
-           velocidad = 7; 
-         }
+         Globales.velocidad = Globales.velocidadMax1;
+         
            
       }
       if(jugador == 2)
@@ -347,41 +333,22 @@ class Program
          resultado = buscarJugador(Mapa , 2);
          posicion_x = resultado.Item1;
          posicion_y = resultado.Item2;
-          if(personaje == TipoPersonaje.Zara)
-         {
-           velocidad = 6;
-         }
-         else if(personaje == TipoPersonaje.Halvar)
-         {
-           velocidad = 4; 
-         }
-            else if(personaje == TipoPersonaje.Axton)
-         {
-           velocidad = 4; 
-         }
-          else if(personaje == TipoPersonaje.Ralof)
-         {
-           velocidad = 4; 
-         }
-          else if(personaje == TipoPersonaje.Sky)
-         {
-           velocidad = 5; 
-         }
-         else if(personaje == TipoPersonaje.Lyn)
-         {
-           velocidad = 7; 
-         }      
+          Globales.velocidad = Globales.velocidadMax2;
+             
       }
       
                         
-        while(velocidad > 0)
+        while(Globales.velocidad > 0)
         {         
             ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
             switch(teclaPresionada.Key)
             {
                 //izquierda
                 case ConsoleKey.A:
-                if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1 
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
                    Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -389,9 +356,12 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2; 
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
-                  if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                  if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2 
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2 
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
                    Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -399,12 +369,15 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2; 
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }    
                 //derecha                 
                     break;
                 case ConsoleKey.D:                
-                if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 1 
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1 
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
                    Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -412,9 +385,12 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
-                if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2 
+                 || Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
                    Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -422,12 +398,15 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
                 //arriba  
                     break;
                 case ConsoleKey.W:
-                if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1 
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
                    Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -435,9 +414,12 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
-                if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino && jugador == 2
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2 
+                 || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
                    Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -445,12 +427,15 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
                 //abajo 
                     break;
                 case ConsoleKey.S:
-                if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 || Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1
+                 || Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1 
+                 || Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
                    Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -458,9 +443,12 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 }
-                 if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                 if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino && jugador == 2
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2 
+                 || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
                    Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
@@ -468,7 +456,7 @@ class Program
                    posicion_x = resultado.Item1;
                    posicion_y = resultado.Item2;
                    render(Mapa);
-                   velocidad --;
+                   Globales.velocidad --;
                 } 
                     break;
                 case ConsoleKey.H:
@@ -516,17 +504,13 @@ class Program
         }
         crearLimites(Mapa);
         colocarParedes(Mapa , 200);
-        generarJugadores(Mapa);
         Completo = EsConectado(Mapa);
       }while(Completo == false);
       solucionarError(Mapa);
+      agregarTrampas(Mapa , 20);
+      generarJugadores(Mapa);
       render(Mapa);
-    }    
-
-
-
-
-    //===========Nuevo agregado por el DFS==========================
+    } 
 
      static bool EsConectado(Casilla[,] Mapa)
     {
@@ -593,24 +577,134 @@ class Program
 
      }
 
+     static void agregarTrampas(Casilla[,] Mapa , int cantTrampas)
+     {
+      int x = 0;
+      int y = 0;
+      int z = 0;
+      int cantColocada = 0;
+       Random numeroAleatorio = new Random();      
+      for(int i = 0; i < cantTrampas; i++)
+      {
+        if(cantColocada < cantTrampas)
+        {
+          z = numeroAleatorio.Next(1,4);
+          if(z == 1)
+          {
+            do{
+            x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 1);
+            y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 1);
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+            Mapa[x,y].tipoCasilla = TipoCasilla.trampaenfriamiento;
+            cantColocada++;
+          }
+          else if(z == 2)
+          {
+            do{
+            x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 1);
+            y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 1);
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+            Mapa[x,y].tipoCasilla = TipoCasilla.trampavelocidad;
+            cantColocada++;
+          }
+          else if(z == 3)
+          {
+            do{
+            x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 1);
+            y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 1);
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+            Mapa[x,y].tipoCasilla = TipoCasilla.trampateletransportacion;
+            cantColocada++;
+          }
+
+        }
+
+      }
 
 
 
+     }
 
+     static void tomaTrampa(Casilla[,] Mapa , TipoCasilla tipoTrampa , int jugador)
+     {
+      //========trampa de enfriamiento====================================
+       if(tipoTrampa == TipoCasilla.trampaenfriamiento && jugador == 1)
+       Globales.enfriamiento1 = Globales.enfriamiento1 + 5;
+       else if(tipoTrampa == TipoCasilla.trampaenfriamiento && jugador == 2)
+       Globales.enfriamiento2 = Globales.enfriamiento2 + 5;
+       //=================================================================
+       else if(tipoTrampa == TipoCasilla.trampavelocidad)
+       Globales.velocidad = 0;
+     }
 
-
-
-
-
-
-
+     static void asignandoVelocidades(TipoPersonaje tipoPersonaje , int jugador)
+     {
+      if(jugador == 1)
+      {
+       if(tipoPersonaje == TipoPersonaje.Zara)
+         {
+           Globales.velocidadMax1 = 4;
+         }
+         else if(tipoPersonaje == TipoPersonaje.Halvar)
+         {
+           Globales.velocidadMax1 = 4; 
+         }
+            else if(tipoPersonaje == TipoPersonaje.Axton)
+         {
+           Globales.velocidadMax1 = 4; 
+         }
+          else if(tipoPersonaje == TipoPersonaje.Ralof)
+         {
+           Globales.velocidadMax1 = 4; 
+         }
+          else if(tipoPersonaje == TipoPersonaje.Sky)
+         {
+           Globales.velocidadMax1 = 4; 
+         }
+         else if(tipoPersonaje == TipoPersonaje.Lyn)
+         {
+           Globales.velocidadMax1 = 4;
+         }
+        }
+      if(jugador == 2)
+      {
+       if(tipoPersonaje == TipoPersonaje.Zara)
+         {
+           Globales.velocidadMax2 = 4;
+         }
+         else if(tipoPersonaje == TipoPersonaje.Halvar)
+         {
+           Globales.velocidadMax2 = 4; 
+         }
+            else if(tipoPersonaje == TipoPersonaje.Axton)
+         {
+           Globales.velocidadMax2 = 4; 
+         }
+          else if(tipoPersonaje == TipoPersonaje.Ralof)
+         {
+           Globales.velocidadMax2 = 4; 
+         }
+          else if(tipoPersonaje == TipoPersonaje.Sky)
+         {
+           Globales.velocidadMax2 = 4; 
+         }
+         else if(tipoPersonaje == TipoPersonaje.Lyn)
+         {
+           Globales.velocidadMax2 = 4;
+         }
+     }
   }
+}
 public static class Globales
 {
   public static int enfriamiento1 = 0;
   public static int enfriamiento2 = 0;
   public static int CASILLA_X_SIZE = 50;
   public static int CASILLA_Y_SIZE = 20;
+  public static int velocidad = 0;
+  public static int velocidadMax1 = 0;
+  public static int velocidadMax2 = 0;
+
 }
 
 

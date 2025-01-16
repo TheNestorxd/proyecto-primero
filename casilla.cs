@@ -8,6 +8,9 @@ namespace CasillaNS
         jugador,
         jugador2,
         caminovisitado,
+        trampaenfriamiento,
+        trampavelocidad,
+        trampateletransportacion,
     }
     public class Casilla
     {
