@@ -1,0 +1,6 @@
+namespace HabilidadesNS
+{
+    class Habilidad{
+        
+    }
+}
