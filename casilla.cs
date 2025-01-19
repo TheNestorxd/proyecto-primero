@@ -11,6 +11,7 @@ namespace CasillaNS
         trampaenfriamiento,
         trampavelocidad,
         trampateletransportacion,
+        sombra,
     }
     public class Casilla
     {

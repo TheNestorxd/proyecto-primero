@@ -32,7 +32,7 @@ class Program
         
                                           
         //============Jugabilidad=========================   
-        while(true)
+        while(Globales.puntuacion1 < 11 && Globales.puntuacion2 < 11)
         {
 
           jugarTurno(Laberinto , jugador , jugadorPersonaje);
@@ -47,8 +47,14 @@ class Program
             jugadorPersonaje = jugador1Personaje; 
           }
                                                      
-        }    
+        } 
+        Console.Clear();
+        if(Globales.puntuacion1 >= 11)
+        Console.WriteLine("ha ganado el jugador 1");
+        else if(Globales.puntuacion2 >= 11)
+        Console.WriteLine("ha ganado el jugador 2");   
         }
+        
         
         
                                                                                       
@@ -57,7 +63,9 @@ class Program
     static void render (Casilla [,] Mapa){
         
         Console.Clear();
-        Dibujar(Mapa); 
+        Dibujar(Mapa);
+        Console.WriteLine("puntuacion del jugador 1 : " + Globales.puntuacion1);
+        Console.WriteLine("puntuacion del jugador 2 : " + Globales.puntuacion2);
     }
     //===============================================================
     static void crearLimites(Casilla[,] Mapa)
@@ -78,13 +86,10 @@ class Program
     static void colocarParedes(Casilla[,] Mapa , int paredesTotales)
     {
         int x = 0;
-        int y = 0;
-        int ParedesTotales = paredesTotales;  
-        
+        int y = 0;         
         Random numeroAleatorio = new Random();
-        
-        
-        for(int i = 0; i < ParedesTotales ; i++) 
+                
+        for(int i = 0; i < paredesTotales ; i++) 
         {          
             do
             {
@@ -99,7 +104,28 @@ class Program
                                       
     }
         
-    
+    static void colocarSombras(Casilla[,] Mapa , int sombrasTotales)
+    {
+       int x = 0;
+        int y = 0;
+ 
+        
+        Random numeroAleatorio = new Random();
+        
+        
+        for(int i = 0; i < sombrasTotales ; i++) 
+        {          
+            do
+            {
+                x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 2);
+                y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 2);
+
+            }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+
+            Mapa[x,y].tipoCasilla = TipoCasilla.sombra;                                                                 
+        
+        }
+    }
 
     public static int contarParedes(Casilla[,] Mapa)
     {
@@ -135,7 +161,9 @@ class Program
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.trampateletransportacion)
                     canvas.SetPixel(i, j, Color.Yellow);
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.trampaenfriamiento)
-                    canvas.SetPixel(i, j, Color.Green);  
+                    canvas.SetPixel(i, j, Color.Green);
+                if(Laberinto[i,j].tipoCasilla == TipoCasilla.sombra)
+                    canvas.SetPixel(i, j, Color.Purple4);   
                       
             }
         AnsiConsole.Write(canvas);  
@@ -312,7 +340,7 @@ class Program
        return Mapa;
     }
 
-    public static void usarHabilidadHalvar(TipoPersonaje tipo , Casilla[,] Mapa , int jugador)
+    public static void usarHabilidadHalvar( Casilla[,] Mapa , int jugador)
     {
        var resultado = buscarJugador(Mapa , 1);
       int posicion_x1 = resultado.Item1;
@@ -368,8 +396,11 @@ class Program
             {
                 //======================izquierda Jugador 1================================
                 case ConsoleKey.A:
-                if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 ||Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
+                   if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra)
+                   Globales.puntuacion1 ++;
                    Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.jugador;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 1);
@@ -412,8 +443,11 @@ class Program
                    Globales.velocidad --;
                 }
                 //=================================Izquierda Jugador 2=======================================
-                  if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 2 )
+                  if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 2
+                   ||Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 2)
                 {
+                   if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra )
+                   Globales.puntuacion2 ++;
                    Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 2);
@@ -460,8 +494,11 @@ class Program
                 //======================================Derecha  jugador 1========================================               
                     break;
                 case ConsoleKey.D:                
-                if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1 )
+                if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 ||Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
+                  if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra)
+                  Globales.puntuacion1 ++;
                    Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.jugador;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 1);
@@ -506,8 +543,11 @@ class Program
                 //==============================================================================================
 
                 //==================================derecha jugador 2======================================
-                if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 2
+                 ||Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 2)
                 {
+                  if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra)
+                  Globales.puntuacion2 ++;
                    Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 2);
@@ -554,8 +594,11 @@ class Program
                 //========================================arriba  jugador 1=================================================
                     break;
                 case ConsoleKey.W:
-                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
+                  if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.sombra)
+                  Globales.puntuacion1 ++;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla = TipoCasilla.jugador;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 1);
@@ -600,8 +643,11 @@ class Program
                 //==============================================================================================
 
                 //===================================arriba jugador 2==========================================
-                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.camino && jugador == 2
+                 ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.sombra && jugador == 2)
                 {
+                  if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.sombra)
+                   Globales.puntuacion2 ++;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 2);
@@ -648,8 +694,11 @@ class Program
                 //===================================abajo jugador 1=================================
                     break;
                 case ConsoleKey.S:
-                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.camino && jugador == 1
+                 ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
+                  if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.sombra)
+                   Globales.puntuacion1 ++;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla = TipoCasilla.jugador;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 1);
@@ -695,8 +744,11 @@ class Program
                 //======================================================================================
 
                 //============================abajo jugador 2================================================
-                 if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                 if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.camino && jugador == 2
+                  ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.sombra && jugador == 2)
                 {
+                  if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.sombra)
+                   Globales.puntuacion2 ++;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla = TipoCasilla.jugador2;
                    Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual].tipoCasilla = TipoCasilla.camino;
                    resultado = buscarJugador(Mapa , 2);
@@ -749,7 +801,7 @@ class Program
                 }
                 else if(personaje == TipoPersonaje.Halvar)
                 {
-                  usarHabilidadHalvar(personaje, Mapa , jugador);
+                  usarHabilidadHalvar( Mapa , jugador);
                 }
                 }
                 else if(Globales.enfriamiento2 == 0 && jugador == 2)
@@ -760,7 +812,7 @@ class Program
                 }
                 else if(personaje == TipoPersonaje.Halvar)
                 {
-                  usarHabilidadHalvar(personaje, Mapa , jugador);
+                  usarHabilidadHalvar( Mapa , jugador);
                 }
                 }
                 else if(Globales.enfriamiento1 > 0 || Globales.enfriamiento2 > 0)
@@ -798,6 +850,7 @@ class Program
       solucionarError(Mapa);
       agregarTrampas(Mapa , 100);
       generarJugadores(Mapa);
+      colocarSombras(Mapa , 21);
       render(Mapa);
     } 
 
@@ -963,7 +1016,7 @@ class Program
          }
          else if(tipoPersonaje == TipoPersonaje.Halvar)
          {
-           Globales.velocidadMax1 = 4; 
+           Globales.velocidadMax1 = 100; 
          }
             else if(tipoPersonaje == TipoPersonaje.Axton)
          {
@@ -1022,6 +1075,8 @@ public static class Globales
   public static int velocidadMax2 = 0;
   public static int posicion_x_actual;
   public static int posicion_y_actual;
+  public static int puntuacion1 = 0;
+  public static int puntuacion2 = 0;
 
 }
 
