@@ -8,7 +8,7 @@ namespace PersonajeNS{
         Zara,
         Halvar,
         Axton,
-        Ralof,
+        Yuri,
         Sky,
         Lyn,
     }

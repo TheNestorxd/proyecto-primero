@@ -1,6 +1,4 @@
-namespace HabilidadesNS
+namespace Principal
 {
-    class Habilidad{
-        
-    }
+    
 }
