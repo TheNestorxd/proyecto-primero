@@ -13,9 +13,11 @@ class Program
         // Variables----------------------------------------------                                                                                  
         const int CASILLA_X_SIZE = 60;
         const int CASILLA_Y_SIZE = 20;
-        TipoPersonaje jugador1Personaje = TipoPersonaje.Halvar;
-        asignandoVelocidades(jugador1Personaje , 1);
-        TipoPersonaje jugador2Personaje = TipoPersonaje.Zara;
+         TipoPersonaje[] bans = new TipoPersonaje[] {  };
+        TipoPersonaje jugador1Personaje = menuSeleccion(bans);
+         bans = bans.Append(jugador1Personaje).ToArray();
+         TipoPersonaje jugador2Personaje = menuSeleccion(bans);        
+        asignandoVelocidades(jugador1Personaje , 1);      
         asignandoVelocidades(jugador2Personaje , 2);
         int jugador = 1;
         TipoPersonaje jugadorPersonaje = jugador1Personaje;
@@ -26,6 +28,9 @@ class Program
         for (int j = 0; j < CASILLA_Y_SIZE; j++)
         Laberinto[i,j] = new Casilla();                                   
         //============Creacion del Mapa=========================
+       
+        
+       
         crearMapa(Laberinto);                                                  
         //============Jugabilidad=========================   
         while(Globales.puntuacion1 < 11 && Globales.puntuacion2 < 11)
@@ -60,6 +65,14 @@ class Program
         Console.WriteLine("puntuacion del jugador 1 : " + Globales.puntuacion1);
         Console.WriteLine("puntuacion del jugador 2 : " + Globales.puntuacion2);
         Console.WriteLine("velocidad restante : " + Globales.velocidad);
+        var table = new Table();
+
+        table.AddColumn("algo").Expand();
+        table.AddColumn(new TableColumn("algo").Centered()).Expand();
+
+        table.AddRow("otro mas" , "algo mas");
+        table.AddRow("otro mas" , "algo mas");
+        AnsiConsole.Write(table);
     }
 
     static void render (Casilla [,] Mapa , bool x)
@@ -129,18 +142,38 @@ class Program
         }
     }
 
-    public static int contarParedes(Casilla[,] Mapa)
+    static TipoPersonaje menuSeleccion(TipoPersonaje[] baneados)
     {
-      int contadorParedes = 0;
-      for(int j = 1; j < Globales.CASILLA_Y_SIZE - 1 ; j++)
-      for(int i = 1; i < Globales.CASILLA_X_SIZE - 1 ; i++)
-      {
-        if(Mapa[i,j].tipoCasilla == TipoCasilla.pared)
-        contadorParedes ++;
-      }
-      return contadorParedes;
-    }
+        // Lista completa de opciones
+        TipoPersonaje[] choices = new TipoPersonaje[]
+        {
+            TipoPersonaje.Zara,
+            TipoPersonaje.Yuri,
+            TipoPersonaje.Halvar,
+            TipoPersonaje.Axton,
+            TipoPersonaje.Lyn
+        };
 
+        // Filtrar las opciones para excluir los baneados
+        var opcionesDisponibles = choices.Where(opcion => !baneados.Contains(opcion)).ToArray();
+
+        // Verificar si hay opciones disponibles
+        if (opcionesDisponibles.Length == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No hay opciones disponibles para seleccionar.[/]");
+            return TipoPersonaje.Zara;
+        }
+
+        // Crear el menú de selección con las opciones filtradas
+        TipoPersonaje tipoPersonaje = AnsiConsole.Prompt(
+            new SelectionPrompt<TipoPersonaje>()
+                .Title("¿Qué tipo de personaje deseas seleccionar?")
+                .AddChoices(opcionesDisponibles));
+
+        // Mostrar el resultado
+        AnsiConsole.MarkupLine($"[green]Tipo de personaje seleccionado: {tipoPersonaje}[/]");
+        return tipoPersonaje;
+}
     
     static void Dibujar(Casilla[,] Laberinto)
     {
