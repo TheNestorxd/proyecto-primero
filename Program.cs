@@ -3,6 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
 using CasillaNS;
 using PersonajeNS;
+using System.Reflection.Emit;
 
 namespace Principal
 {
@@ -13,10 +14,15 @@ class Program
         // Variables----------------------------------------------                                                                                  
         const int CASILLA_X_SIZE = 60;
         const int CASILLA_Y_SIZE = 20;
-         TipoPersonaje[] bans = new TipoPersonaje[] {  };
+
+        bienvenida();
+       //=================Menu de inicio=====================
+        TipoPersonaje[] bans = new TipoPersonaje[] {  };
         TipoPersonaje jugador1Personaje = menuSeleccion(bans);
          bans = bans.Append(jugador1Personaje).ToArray();
-         TipoPersonaje jugador2Personaje = menuSeleccion(bans);        
+         TipoPersonaje jugador2Personaje = menuSeleccion(bans);
+
+       //=======================================================
         asignandoVelocidades(jugador1Personaje , 1);      
         asignandoVelocidades(jugador2Personaje , 2);
         int jugador = 1;
@@ -34,8 +40,7 @@ class Program
         crearMapa(Laberinto);                                                  
         //============Jugabilidad=========================   
         while(Globales.puntuacion1 < 11 && Globales.puntuacion2 < 11)
-        {
-          Console.WriteLine("TURNO DEL JUGADOR " + jugador);
+        {        
           jugarTurno(Laberinto , jugador , jugadorPersonaje);
           if(jugador == 1)
           {
@@ -57,22 +62,74 @@ class Program
         Console.WriteLine("ha ganado el jugador 2");   
         }
                                                                                                                
-    //================Dibujado del mapa=============================
+    //================Metodos de Graficados=============================
+     static TipoPersonaje menuSeleccion(TipoPersonaje[] baneados)
+    {
+        // Lista completa de opciones
+        TipoPersonaje[] choices = new TipoPersonaje[]
+        {
+            TipoPersonaje.Zara,
+            TipoPersonaje.Yuri,
+            TipoPersonaje.Halvar,
+            TipoPersonaje.Axton,
+            TipoPersonaje.Lyn
+        };
+
+        // Filtrar las opciones para excluir los baneados
+        var opcionesDisponibles = choices.Where(opcion => !baneados.Contains(opcion)).ToArray();
+
+        // Verificar si hay opciones disponibles
+        if (opcionesDisponibles.Length == 0)
+        {
+            AnsiConsole.MarkupLine("[red]No hay opciones disponibles para seleccionar.[/]");
+            return TipoPersonaje.Zara;
+        }
+
+        // Crear el menú de selección con las opciones filtradas
+        TipoPersonaje tipoPersonaje = AnsiConsole.Prompt(
+            new SelectionPrompt<TipoPersonaje>()
+                .Title("¿Qué tipo de personaje deseas seleccionar?")
+                .AddChoices(opcionesDisponibles));
+
+        // Mostrar el resultado
+        AnsiConsole.MarkupLine($"[green]Tipo de personaje seleccionado: {tipoPersonaje}[/]");
+        return tipoPersonaje;
+}
+
+     static void bienvenida()
+     {
+        AnsiConsole.Write(
+         new FigletText("Bienvenido a :")
+        .LeftJustified()
+        .Color(Color.Red));
+        AnsiConsole.Write(
+         new FigletText("Cazadores de Zombras")
+        .LeftJustified()
+        .Color(Color.Purple4));
+        System.Threading.Thread.Sleep(2000);
+
+     }
+
     static void render (Casilla [,] Mapa)
     {        
         Console.Clear();
         Dibujar(Mapa);
-        Console.WriteLine("puntuacion del jugador 1 : " + Globales.puntuacion1);
-        Console.WriteLine("puntuacion del jugador 2 : " + Globales.puntuacion2);
-        Console.WriteLine("velocidad restante : " + Globales.velocidad);
-        var table = new Table();
+              
+       AnsiConsole.Write(new BarChart()
+      .Width(60)
+      .Label("[green bold underline]Estadisticas[/]")
+      .CenterLabel()
+      .AddItem("puntuacion jugador 1", Globales.puntuacion1, Color.Blue)
+      .AddItem("puntuacion jugador 2", Globales.puntuacion2, Color.Red)
+      .AddItem("velocidad", Globales.velocidad, Color.Green)
+      .AddItem("enfriamiento jugador 1", Globales.enfriamiento1, Color.Cyan1)
+      .AddItem("enfriamiento jugador 2", Globales.enfriamiento2, Color.Cyan1)
+      .AddItem("Objetivo", 11, Color.Yellow));
 
-        table.AddColumn("algo").Expand();
-        table.AddColumn(new TableColumn("algo").Centered()).Expand();
+      AnsiConsole.Write(new Markup("[bold red underline]Log :[/]").Centered());
 
-        table.AddRow("otro mas" , "algo mas");
-        table.AddRow("otro mas" , "algo mas");
-        AnsiConsole.Write(table);
+    
+
     }
 
     static void render (Casilla [,] Mapa , bool x)
@@ -142,38 +199,7 @@ class Program
         }
     }
 
-    static TipoPersonaje menuSeleccion(TipoPersonaje[] baneados)
-    {
-        // Lista completa de opciones
-        TipoPersonaje[] choices = new TipoPersonaje[]
-        {
-            TipoPersonaje.Zara,
-            TipoPersonaje.Yuri,
-            TipoPersonaje.Halvar,
-            TipoPersonaje.Axton,
-            TipoPersonaje.Lyn
-        };
-
-        // Filtrar las opciones para excluir los baneados
-        var opcionesDisponibles = choices.Where(opcion => !baneados.Contains(opcion)).ToArray();
-
-        // Verificar si hay opciones disponibles
-        if (opcionesDisponibles.Length == 0)
-        {
-            AnsiConsole.MarkupLine("[red]No hay opciones disponibles para seleccionar.[/]");
-            return TipoPersonaje.Zara;
-        }
-
-        // Crear el menú de selección con las opciones filtradas
-        TipoPersonaje tipoPersonaje = AnsiConsole.Prompt(
-            new SelectionPrompt<TipoPersonaje>()
-                .Title("¿Qué tipo de personaje deseas seleccionar?")
-                .AddChoices(opcionesDisponibles));
-
-        // Mostrar el resultado
-        AnsiConsole.MarkupLine($"[green]Tipo de personaje seleccionado: {tipoPersonaje}[/]");
-        return tipoPersonaje;
-}
+   
     
     static void Dibujar(Casilla[,] Laberinto)
     {
@@ -1012,7 +1038,13 @@ class Program
     }    
 //=======================================================================================================
     static void jugarTurno(Casilla[,] Mapa , int jugador , TipoPersonaje personaje)
-    {      
+    { 
+      if(jugador == 1 && Globales.enfriamiento1 > 0)
+        Globales.enfriamiento1 --;
+      if(jugador == 2 && Globales.enfriamiento2 > 0)
+        Globales.enfriamiento2 --;
+        
+
       var resultado = buscarJugador(Mapa , 1);
       Globales.posicion_x_actual = 5;
       Globales.posicion_y_actual = 5;
@@ -1036,7 +1068,9 @@ class Program
       
                         
         while(Globales.velocidad > 0)
-        {         
+        { 
+            render(Mapa); 
+            Console.WriteLine("TURNO DEL JUGADOR " + jugador);       
             ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
             switch(teclaPresionada.Key)
             {
@@ -1053,7 +1087,7 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
+                  
                    
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
@@ -1065,7 +1099,7 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
+                   
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");                  
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -1076,7 +1110,7 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
+                
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -1089,7 +1123,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //=================================Izquierda Jugador 2=======================================
@@ -1104,7 +1137,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                 } 
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
                 {
@@ -1115,7 +1147,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -1126,7 +1157,6 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -1139,7 +1169,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //=========================================================================================== 
@@ -1158,7 +1187,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --;
-                   render(Mapa);
                 }
                  else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
                 {
@@ -1169,7 +1197,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -1180,7 +1207,6 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -1193,7 +1219,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //==============================================================================================
@@ -1210,7 +1235,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --;
-                   render(Mapa);
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
                 {
@@ -1221,7 +1245,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -1232,7 +1255,6 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -1245,7 +1267,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //===========================================================================================
@@ -1264,7 +1285,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --;
-                   render(Mapa);
                 }
                  else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
                 {
@@ -1275,7 +1295,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -1286,7 +1305,6 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -1299,7 +1317,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //==============================================================================================
@@ -1316,7 +1333,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --;
-                   render(Mapa);
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
                 {
@@ -1327,7 +1343,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -1338,7 +1353,6 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -1351,7 +1365,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 //==================================================================================
@@ -1369,8 +1382,7 @@ class Program
                    resultado = buscarJugador(Mapa , 1);
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
-                   Globales.velocidad --;
-                   render(Mapa);
+                   Globales.velocidad --;                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
                 {
@@ -1381,7 +1393,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -1392,7 +1403,6 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -1405,7 +1415,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
                 
@@ -1423,7 +1432,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --;
-                   render(Mapa);
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
                 {
@@ -1434,7 +1442,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -1445,7 +1452,6 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -1458,7 +1464,6 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   render(Mapa);
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 } 
                 //===========================Habilidad=================================================
@@ -1522,10 +1527,7 @@ class Program
                 
 
             }
-        if(jugador == 1 && Globales.enfriamiento1 > 0)
-        Globales.enfriamiento1 --;
-        if(jugador == 2 && Globales.enfriamiento2 > 0)
-        Globales.enfriamiento2 --;
+        
 
         }
 
@@ -1543,7 +1545,7 @@ class Program
         Completo = EsConectado(Mapa);
       }while(Completo == false);
       solucionarError(Mapa);
-      agregarTrampas(Mapa , 1);
+      agregarTrampas(Mapa , 60);
       generarJugadores(Mapa);
       colocarSombras(Mapa , 30);
       render(Mapa);
