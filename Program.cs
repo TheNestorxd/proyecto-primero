@@ -4,6 +4,7 @@ using Spectre.Console;
 using CasillaNS;
 using PersonajeNS;
 using System.Reflection.Emit;
+using System.Collections;
 
 namespace Principal
 {
@@ -444,13 +445,13 @@ class Program
       render(Mapa);
       if(jugador == 1)
       {
-      Globales.enfriamiento1 = Globales.enfriamiento1 + 5;
+      Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
       Globales.posicion_x_actual = posicion_x2;
       Globales.posicion_y_actual = posicion_y2;
       }
       else if(jugador == 2)
       {
-      Globales.enfriamiento2 = Globales.enfriamiento2 + 5;
+      Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
       Globales.posicion_x_actual = posicion_x1;
       Globales.posicion_y_actual = posicion_y1;
       }
@@ -461,15 +462,15 @@ class Program
       render(Mapa , true);
       System.Threading.Thread.Sleep(2000);
       if(jugador == 1)
-      Globales.enfriamiento1 = Globales.enfriamiento1 + 3;
+      Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
       else if(jugador == 2)
-      Globales.enfriamiento2 = Globales.enfriamiento2 + 3;
+      Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
       render(Mapa);
     }
 
     public static void usarHabilidadYuri(Casilla[,] Mapa , int jugador)
     {
-      int cantAumentada = 3;
+      int cantAumentada = 5;
       int x = 0;            
       Random numeroAleatorio = new Random();
       while(cantAumentada < 8)
@@ -483,9 +484,9 @@ class Program
       
       Globales.velocidad = Globales.velocidad + cantAumentada;
       if(jugador == 1)
-      Globales.enfriamiento1 = Globales.enfriamiento1 + 3;
+      Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
       if(jugador == 2)
-      Globales.enfriamiento2 = Globales.enfriamiento2 + 3;
+      Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
       render(Mapa);
       Console.WriteLine("la cantidad aumentada fue de : " + cantAumentada);            
     } 
@@ -767,8 +768,8 @@ class Program
               }
             }
             break;
-            case ConsoleKey.S:
-            if(Mapa[posicion_x,posicion_y - 1].tipoCasilla == TipoCasilla.pared || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.limite)
+            case ConsoleKey.W:
+            if(Mapa[posicion_x,posicion_y - 1].tipoCasilla == TipoCasilla.pared || Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.limite)
             {
               Console.WriteLine("Lyn: estoy pegada a una pared , necesito distancia");
               return Mapa;
@@ -899,98 +900,98 @@ class Program
               }
             }
             break;
-            case ConsoleKey.O:
-            if(Mapa[posicion_x - 1,posicion_y].tipoCasilla == TipoCasilla.pared || Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.limite)
+            case ConsoleKey.S:
+            if(Mapa[posicion_x,posicion_y + 1].tipoCasilla == TipoCasilla.pared || Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.limite)
             {
               Console.WriteLine("Lyn: estoy pegada a una pared , necesito distancia");
               return Mapa;
             }
-            else if(Mapa[posicion_x - 1,posicion_y].tipoCasilla == TipoCasilla.jugador)
+            else if(Mapa[posicion_x,posicion_y + 1].tipoCasilla == TipoCasilla.jugador)
             {
               Console.WriteLine("Lyn : ya estamos pegados");
               return Mapa;
             }
-             else if(Mapa[posicion_x - 1,posicion_y].tipoCasilla == TipoCasilla.jugador2)
+             else if(Mapa[posicion_x,posicion_y + 1].tipoCasilla == TipoCasilla.jugador2)
             {
               Console.WriteLine("Lyn : ya estamos pegados");
               return Mapa;
             }
-            for(int i = posicion_x - 1; i >= 0 ; i--)
+            for(int i = posicion_y + 1; i >= 0 ; i++)
             {
-              if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.pared || Mapa[i,posicion_y].tipoCasilla == TipoCasilla.limite)
+              if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.pared || Mapa[i,posicion_y].tipoCasilla == TipoCasilla.limite)
               {
-                if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 1)
+                if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.camino && jugador == 1)
                 {
-                  Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                  Globales.posicion_x_actual = i + 1;
+                  Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                  Globales.posicion_y_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
                   render(Mapa);
                   return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
                 {
-                  Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
-                  Globales.posicion_x_actual = i + 1;
+                  Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador2;
+                  Globales.posicion_y_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                   render(Mapa);
                   return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
                    render(Mapa);
                    return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                    render(Mapa);
                    return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
                    render(Mapa);
                    return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                    render(Mapa);
                    return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
                    render(Mapa);
                    return Mapa;
                 }
-                else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
+                else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
-                   Mapa[i + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                   Globales.posicion_x_actual = i + 1;
+                   Mapa[posicion_x, i - 1].tipoCasilla = TipoCasilla.jugador;
+                   Globales.posicion_y_actual = i - 1;
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
@@ -998,9 +999,9 @@ class Program
                    return Mapa;
                 }
               }
-              else if(Mapa[i, posicion_y].tipoCasilla == TipoCasilla.sombra)
+              else if(Mapa[posicion_x, i].tipoCasilla == TipoCasilla.sombra)
               {
-                Mapa[i, posicion_y].tipoCasilla = TipoCasilla.camino;
+                Mapa[posicion_x, i].tipoCasilla = TipoCasilla.camino;
                 if(jugador == 1)
                 {
                 Globales.puntuacion1 ++;
@@ -1015,22 +1016,23 @@ class Program
                 render(Mapa);
                 return Mapa;
               }
-              else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador)
+              else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador)
               {
-                Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
-                Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
+                Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
+                Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador;
                 render(Mapa);
                 return Mapa;
               }
-              else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador2)
+              else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador2)
               {
-                Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
-                Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
+                Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
+                Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador2;
                 render(Mapa);
                 return Mapa;
               }
             }
             break;
+            
           }
        }
 
@@ -1039,6 +1041,7 @@ class Program
 //=======================================================================================================
     static void jugarTurno(Casilla[,] Mapa , int jugador , TipoPersonaje personaje)
     { 
+      bool terminarTurno = false;
       if(jugador == 1 && Globales.enfriamiento1 > 0)
         Globales.enfriamiento1 --;
       if(jugador == 2 && Globales.enfriamiento2 > 0)
@@ -1067,15 +1070,17 @@ class Program
       }
       
                         
-        while(Globales.velocidad > 0)
+        while(terminarTurno == false)
         { 
             render(Mapa); 
-            Console.WriteLine("TURNO DEL JUGADOR " + jugador);       
-            ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);
+            Console.WriteLine("TURNO DEL JUGADOR " + jugador);                      
+            ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);                                   
             switch(teclaPresionada.Key)
             {
                 //======================izquierda Jugador 1================================
                 case ConsoleKey.A:
+              if(Globales.velocidad > 0)
+              {               
                 if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1
                  ||Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
@@ -1171,11 +1176,14 @@ class Program
                    Globales.velocidad --; 
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
+              }
                 //=========================================================================================== 
 
                 //======================================Derecha  jugador 1========================================               
                     break;
-                case ConsoleKey.D:                
+                case ConsoleKey.D:
+              if(Globales.velocidad > 0)
+              {                
                 if(Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1
                  ||Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
@@ -1269,11 +1277,14 @@ class Program
                    Globales.velocidad --; 
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
+              }
                 //===========================================================================================
 
                 //========================================arriba  jugador 1=================================================
                     break;
                 case ConsoleKey.W:
+              if(Globales.velocidad > 0)
+              {
                 if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.camino && jugador == 1
                  ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
@@ -1367,11 +1378,14 @@ class Program
                    Globales.velocidad --; 
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
                 }
+              }
                 //==================================================================================
 
                 //===================================abajo jugador 1=================================
                     break;
                 case ConsoleKey.S:
+                if(Globales.velocidad > 0)
+              {
                 if(Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.camino && jugador == 1
                  ||Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.sombra && jugador == 1)
                 {
@@ -1465,9 +1479,10 @@ class Program
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
                    Console.WriteLine("Caiste en una trampa de teletransportacion");
-                } 
+                }
+              } 
                 //===========================Habilidad=================================================
-                    break;
+                    break;             
                 case ConsoleKey.H:
                 if(Globales.enfriamiento1 == 0 && jugador == 1)
                 {
@@ -1523,12 +1538,11 @@ class Program
                   Console.WriteLine("no puedes usar tu habilidad ahora , estara disponible en: " + Globales.enfriamiento2 + " turnos" );
                 }
                 break;
+                case ConsoleKey.Spacebar:
+                 terminarTurno = true;
+                 break;                
                 }
-                
-
             }
-        
-
         }
 
     static void crearMapa(Casilla[,] Mapa)
@@ -1545,7 +1559,7 @@ class Program
         Completo = EsConectado(Mapa);
       }while(Completo == false);
       solucionarError(Mapa);
-      agregarTrampas(Mapa , 60);
+      agregarTrampas(Mapa , 80);
       generarJugadores(Mapa);
       colocarSombras(Mapa , 30);
       render(Mapa);
@@ -1672,11 +1686,11 @@ class Program
       //========trampa de enfriamiento====================================
        if(tipoTrampa == TipoCasilla.trampaenfriamiento && jugador == 1)
        {
-       Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
+       Globales.enfriamiento1 = Globales.enfriamiento1 + 1;
        }
        else if(tipoTrampa == TipoCasilla.trampaenfriamiento && jugador == 2)
        {
-       Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
+       Globales.enfriamiento2 = Globales.enfriamiento2 + 1;
        }
        //=================================================================
 
