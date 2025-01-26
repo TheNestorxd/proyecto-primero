@@ -1104,8 +1104,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");                  
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(2000);                 
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
                 {
@@ -1115,8 +1117,10 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                   
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
@@ -1127,8 +1131,11 @@ class Program
                    resultado = buscarJugador(Mapa , 1);
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
-                   Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   Globales.velocidad --;
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000); 
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 //=================================Izquierda Jugador 2=======================================
                   if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 2
@@ -1151,8 +1158,11 @@ class Program
                    resultado = buscarJugador(Mapa , 2);
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
-                   Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
+                   Globales.velocidad --;
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
                 {
@@ -1161,8 +1171,11 @@ class Program
                    tomaTrampa(Mapa , TipoCasilla.trampavelocidad , 2);
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
-                   Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   Globales.posicion_y_actual = resultado.Item2;
+                    AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000); 
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                   
                 }
                 else if( Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
@@ -1173,8 +1186,11 @@ class Program
                    resultado = buscarJugador(Mapa , 2);
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
-                   Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   Globales.velocidad --;
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000); 
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
               }
                 //=========================================================================================== 
@@ -1205,7 +1221,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
                 {
@@ -1215,7 +1234,10 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);               
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
@@ -1227,7 +1249,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 //==============================================================================================
 
@@ -1253,7 +1278,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
                 {
@@ -1263,7 +1291,10 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                  
                 }
                 else if( Mapa[Globales.posicion_x_actual + 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
@@ -1275,7 +1306,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
               }
                 //===========================================================================================
@@ -1306,7 +1340,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(1000); 
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
                 {
@@ -1316,7 +1353,10 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
@@ -1328,7 +1368,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 //==============================================================================================
 
@@ -1354,7 +1397,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(1000);
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
                 {
@@ -1364,7 +1410,10 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                  
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
@@ -1376,7 +1425,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
               }
                 //==================================================================================
@@ -1407,7 +1459,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento1 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(1000);
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
                 {
@@ -1417,7 +1472,10 @@ class Program
                    resultado = buscarJugador(Mapa , 1);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(2000);                  
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
                 {
@@ -1429,7 +1487,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!!     [/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(2000);
                 }
                 
                 //======================================================================================
@@ -1456,7 +1517,10 @@ class Program
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
                    Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de enfriamiento , ahora tendras que esperar " + Globales.enfriamiento2 + " turnos para usar la habilidad");
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[blue]Caiste en una trampa de enfriamiento , ahora tendras que esperar[/] " + Globales.enfriamiento1 + "[blue] turnos para usar la habilidad[/]"));
+                   System.Threading.Thread.Sleep(1000);
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
                 {
@@ -1466,7 +1530,10 @@ class Program
                    resultado = buscarJugador(Mapa , 2);                   
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2; 
-                   Console.WriteLine("Caiste en una trampa aturdidora , tu turno se detuvo");                   
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000);
+                   AnsiConsole.Write(new Markup("[green]Caiste en una trampa aturdidora , no puedes moverte[/]"));
+                   System.Threading.Thread.Sleep(1000);                   
                 }
                 else if( Mapa[Globales.posicion_x_actual, Globales.posicion_y_actual + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
                 {
@@ -1477,8 +1544,11 @@ class Program
                    resultado = buscarJugador(Mapa , 2);
                    Globales.posicion_x_actual = resultado.Item1;
                    Globales.posicion_y_actual = resultado.Item2;
-                   Globales.velocidad --; 
-                   Console.WriteLine("Caiste en una trampa de teletransportacion");
+                   Globales.velocidad --;
+                   AnsiConsole.Write(new Markup("[red]Ups!!!!![/]"));
+                   System.Threading.Thread.Sleep(1000); 
+                   AnsiConsole.Write(new Markup("[Cyan]Caiste en una trampa de teletransportacion[/]"));
+                   System.Threading.Thread.Sleep(1000);
                 }
               } 
                 //===========================Habilidad=================================================
