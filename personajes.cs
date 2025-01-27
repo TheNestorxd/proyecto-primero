@@ -9,7 +9,6 @@ namespace PersonajeNS{
         Halvar,
         Axton,
         Yuri,
-        Sky,
         Lyn,
     }
 
