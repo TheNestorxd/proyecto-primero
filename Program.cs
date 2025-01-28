@@ -1907,8 +1907,8 @@ public static class Globales
 {
   public static int enfriamiento1 = 0;
   public static int enfriamiento2 = 0;
-  public static int CASILLA_X_SIZE = 80;
-  public static int CASILLA_Y_SIZE = 40;
+  public static int CASILLA_X_SIZE = 67;
+  public static int CASILLA_Y_SIZE = 20;
   public static int velocidad = 0;
   public static int velocidadMax1 = 0;
   public static int velocidadMax2 = 0;
