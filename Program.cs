@@ -159,6 +159,7 @@ class Program
       AnsiConsole.MarkupLine("[green]S: moverse hacia abajo[/]");
       AnsiConsole.MarkupLine("[green]H: activar habilidad[/]");
       AnsiConsole.MarkupLine("[green]Barra Espaciadora: finalizar turno[/]");
+      AnsiConsole.MarkupLine("[green]Escape: ver la info del juego[/]");
       AnsiConsole.WriteLine(" ");
       AnsiConsole.MarkupLine("[green underline]ELEMENTOS DEL MAPA :[/]");
       AnsiConsole.MarkupLine("[White]Pixel Blaco: paredes[/]");
@@ -221,10 +222,13 @@ class Program
 
      }
 
-    static void render (Casilla [,] Mapa)
+    static void render (Casilla [,] Mapa , bool Axton)
     {        
         Console.Clear();
-        Dibujar(Mapa);
+        if(Axton == false)
+        Dibujar(Mapa , false);
+        else
+        Dibujar(Mapa , true);
               
        AnsiConsole.Write(new BarChart()
       .Width(60)
@@ -242,15 +246,7 @@ class Program
     
 
     }
-
-    static void render (Casilla [,] Mapa , bool x)
-    {        
-        Console.Clear();
-        Dibujar(Mapa , true);
-        Console.WriteLine("puntuacion del jugador 1 : " + Globales.puntuacion1);
-        Console.WriteLine("puntuacion del jugador 2 : " + Globales.puntuacion2);
-        Console.WriteLine("velocidad restante : " + Globales.velocidad);       
-    }
+   
     //===============================================================
     static void crearLimites(Casilla[,] Mapa)
     {
@@ -312,9 +308,11 @@ class Program
 
    
     
-    static void Dibujar(Casilla[,] Laberinto)
+    static void Dibujar(Casilla[,] Laberinto , bool Axton)
     {
-        var canvas = new Canvas(Laberinto.GetLength(0), Laberinto.GetLength(1));
+      var canvas = new Canvas(Laberinto.GetLength(0), Laberinto.GetLength(1));
+      if(Axton == false)
+      {      
         for(int j = 0; j < Laberinto.GetLength(1); j++)            
             for(int i = 0; i < Laberinto.GetLength(0); i++)
             {
@@ -339,13 +337,11 @@ class Program
                     canvas.SetPixel(i, j, Color.Purple4);   
                       
             }
-        AnsiConsole.Write(canvas);  
-    }
+        }
+        else
+        {
 
-    static void Dibujar(Casilla[,] Laberinto , bool x)
-    {
-        var canvas = new Canvas(Laberinto.GetLength(0), Laberinto.GetLength(1));
-        for(int j = 0; j < Laberinto.GetLength(1); j++)            
+            for(int j = 0; j < Laberinto.GetLength(1); j++)            
             for(int i = 0; i < Laberinto.GetLength(0); i++)
             {
                 if(Laberinto[i,j].tipoCasilla == TipoCasilla.camino)
@@ -369,9 +365,10 @@ class Program
                     canvas.SetPixel(i, j, Color.Purple4);   
                       
             }
+        }
         AnsiConsole.Write(canvas);  
     }
-
+ 
     static void generarJugadores(Casilla[,] Mapa)
     {
         bool NoColocado = true;
@@ -437,7 +434,7 @@ class Program
           if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.pared)
           {
             Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.camino;
-            render(Mapa);
+            render(Mapa , false);
             habilidadNoUsada = false;
             if(jugador == 1)
             Globales.enfriamiento1 = 2;
@@ -446,13 +443,13 @@ class Program
           }
           else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.limite)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
             return Mapa;
           }
           else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: No hay nada que derribar aqui");
             return Mapa;
           }
@@ -461,7 +458,7 @@ class Program
           if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.pared)
           {
             Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.camino;
-            render(Mapa);
+            render(Mapa , false);
             habilidadNoUsada = false;
             if(jugador == 1)
             Globales.enfriamiento1 = 2;
@@ -470,13 +467,13 @@ class Program
           }
           else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.limite)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
             return Mapa;
           }
           else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: No hay nada que derribar aqui");
             return Mapa;
           }
@@ -485,7 +482,7 @@ class Program
           if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.pared)
           {
             Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.camino;
-            render(Mapa);
+            render(Mapa , false);
             habilidadNoUsada = false;
             if(jugador == 1)
             Globales.enfriamiento1 = 2;
@@ -494,13 +491,13 @@ class Program
           }
           else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.limite)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
             return Mapa;
           }
           else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: No hay nada que derribar aqui");
             return Mapa;
           }
@@ -509,7 +506,7 @@ class Program
           if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.pared)
           {
             Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.camino;
-            render(Mapa);
+            render(Mapa , false);
             habilidadNoUsada = false;
             if(jugador == 1)
             Globales.enfriamiento1 = 2;
@@ -518,13 +515,13 @@ class Program
           }
           else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.limite)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
             return Mapa;
           }
           else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino)
           {
-            render(Mapa);
+            render(Mapa , false);
             Console.WriteLine("Zara: No hay nada que derribar aqui");
             return Mapa;
           }
@@ -552,7 +549,7 @@ class Program
       int posicion_y2 = resultado2.Item2;
       Mapa[posicion_x1,posicion_y1].tipoCasilla = TipoCasilla.jugador2;
       Mapa[posicion_x2,posicion_y2].tipoCasilla = TipoCasilla.jugador;      
-      render(Mapa);
+      render(Mapa , false);
       if(jugador == 1)
       {
       Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
@@ -575,7 +572,7 @@ class Program
       Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
       else if(jugador == 2)
       Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-      render(Mapa);
+      render(Mapa , false);
     }
 
     public static void usarHabilidadYuri(Casilla[,] Mapa , int jugador)
@@ -597,7 +594,7 @@ class Program
       Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
       if(jugador == 2)
       Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-      render(Mapa);
+      render(Mapa , false);
       Console.WriteLine("la cantidad aumentada fue de : " + cantAumentada);            
     } 
 
@@ -640,7 +637,7 @@ class Program
                   Globales.posicion_x_actual = i + 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2)
@@ -649,7 +646,7 @@ class Program
                   Globales.posicion_x_actual = i + 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
@@ -659,7 +656,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
@@ -669,7 +666,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -679,7 +676,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -689,7 +686,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -699,7 +696,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i + 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -709,7 +706,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
               }
@@ -727,21 +724,21 @@ class Program
                 Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                 }
                 
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador)
               {
                 Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador2)
               {
                 Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x - 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
             }
@@ -772,7 +769,7 @@ class Program
                   Globales.posicion_x_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.camino && jugador == 2)
@@ -781,7 +778,7 @@ class Program
                   Globales.posicion_x_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
@@ -791,7 +788,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
@@ -801,7 +798,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -811,7 +808,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -821,7 +818,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -831,7 +828,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[i - 1, posicion_y].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -841,7 +838,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
               }
@@ -859,21 +856,21 @@ class Program
                 Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                 }
                 
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador)
               {
                 Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[i,posicion_y].tipoCasilla == TipoCasilla.jugador2)
               {
                 Mapa[i,posicion_y].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x + 1, posicion_y].tipoCasilla = TipoCasilla.jugador2;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
             }
@@ -904,7 +901,7 @@ class Program
                   Globales.posicion_y_actual = i + 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
@@ -913,7 +910,7 @@ class Program
                   Globales.posicion_y_actual = i + 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
@@ -923,7 +920,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
@@ -933,7 +930,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -943,7 +940,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -953,7 +950,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -963,7 +960,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i + 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -973,7 +970,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
               }
@@ -991,21 +988,21 @@ class Program
                 Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                 }
                 
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador)
               {
                 Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador2)
               {
                 Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x, posicion_y - 1].tipoCasilla = TipoCasilla.jugador2;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
             }
@@ -1036,7 +1033,7 @@ class Program
                   Globales.posicion_y_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.camino && jugador == 2)
@@ -1045,7 +1042,7 @@ class Program
                   Globales.posicion_y_actual = i - 1;
                   Mapa[posicion_x,posicion_y].tipoCasilla = TipoCasilla.camino;
                   Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                  render(Mapa);
+                  render(Mapa , false);
                   return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 1)
@@ -1055,7 +1052,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampaenfriamiento && jugador == 2)
@@ -1065,7 +1062,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 1)
@@ -1075,7 +1072,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampavelocidad && jugador == 2)
@@ -1085,7 +1082,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 1)
@@ -1095,7 +1092,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 1);
                    Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
                 else if(Mapa[posicion_x, i - 1].tipoCasilla == TipoCasilla.trampateletransportacion && jugador == 2)
@@ -1105,7 +1102,7 @@ class Program
                    Mapa[posicion_x, posicion_y].tipoCasilla = TipoCasilla.camino;
                    tomaTrampa(Mapa , TipoCasilla.trampaenfriamiento , 2);
                    Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
-                   render(Mapa);
+                   render(Mapa , false);
                    return Mapa;
                 }
               }
@@ -1123,21 +1120,21 @@ class Program
                 Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
                 }
                 
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador)
               {
                 Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
               else if(Mapa[posicion_x,i].tipoCasilla == TipoCasilla.jugador2)
               {
                 Mapa[posicion_x,i].tipoCasilla = TipoCasilla.camino;
                 Mapa[posicion_x, posicion_y + 1].tipoCasilla = TipoCasilla.jugador2;
-                render(Mapa);
+                render(Mapa , false);
                 return Mapa;
               }
             }
@@ -1182,13 +1179,14 @@ class Program
                         
         while(terminarTurno == false)
         { 
-            render(Mapa); 
+            render(Mapa , false); 
             Console.WriteLine("TURNO DEL JUGADOR " + jugador);                      
             ConsoleKeyInfo teclaPresionada = Console.ReadKey(true);                                   
             switch(teclaPresionada.Key)
             {
-                //======================izquierda Jugador 1================================
+                
                 case ConsoleKey.A:
+              //======================izquierda Jugador 1================================
               if(Globales.velocidad > 0)
               {               
                 if(Mapa[Globales.posicion_x_actual - 1, Globales.posicion_y_actual].tipoCasilla == TipoCasilla.camino && jugador == 1
@@ -1672,7 +1670,10 @@ class Program
                 break;
                 case ConsoleKey.Spacebar:
                  terminarTurno = true;
-                 break;                
+                 break;
+                case ConsoleKey.Escape:
+                menuInfo();
+                break;                
                 }
             }
         }
@@ -1694,7 +1695,7 @@ class Program
       agregarTrampas(Mapa , 80);
       generarJugadores(Mapa);
       colocarSombras(Mapa , 30);
-      render(Mapa);
+      render(Mapa , false);
     } 
 
      static bool EsConectado(Casilla[,] Mapa)
