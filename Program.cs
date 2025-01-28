@@ -5,6 +5,8 @@ using CasillaNS;
 using PersonajeNS;
 using System.Reflection.Emit;
 using System.Collections;
+using NAudio.Wave;
+using System.Threading;
 
 namespace Principal
 {
@@ -13,10 +15,18 @@ class Program
     public static void Main(string[] args)
     {
         // Variables----------------------------------------------                                                                                  
-        const int CASILLA_X_SIZE = 60;
-        const int CASILLA_Y_SIZE = 20;
 
         bienvenida();
+        //=================Audio===================
+        using (WaveOutEvent waveOut = new WaveOutEvent())
+        {
+            using (Mp3FileReader mp3Reader = new Mp3FileReader("C:/Users/15618/Desktop/Proyecto/musica.mp3"))
+            {
+                waveOut.Init(mp3Reader);
+                waveOut.Play();       
+          //============================================
+        
+        menuInfo();
        //=================Menu de inicio=====================
         TipoPersonaje[] bans = new TipoPersonaje[] {  };
         TipoPersonaje jugador1Personaje = menuSeleccion(bans);
@@ -30,8 +40,8 @@ class Program
         Random numeroAleatorio = new Random();        
         Casilla[,] Laberinto = new Casilla[Globales.CASILLA_X_SIZE,Globales.CASILLA_Y_SIZE];
         //============instanciando========================
-        for (int i = 0; i < CASILLA_X_SIZE; i++)
-        for (int j = 0; j < CASILLA_Y_SIZE; j++)
+        for (int i = 0; i < Globales.CASILLA_X_SIZE; i++)
+        for (int j = 0; j < Globales.CASILLA_Y_SIZE; j++)
         Laberinto[i,j] = new Casilla();                                   
         //============Creacion del Mapa=========================
        
@@ -64,6 +74,8 @@ class Program
           victoria(jugador2Personaje);
         }
     }
+  }
+}
                                                                                                                
     //================Metodos de Graficados=============================
      static TipoPersonaje menuSeleccion(TipoPersonaje[] baneados)
@@ -99,6 +111,36 @@ class Program
         return tipoPersonaje;
 }
 
+     static void menuInfo()
+     {
+      AnsiConsole.MarkupLine("[green underline]CONTROLES :[/]");
+      AnsiConsole.MarkupLine("[green]W: moverse hacia arriba[/]");
+      AnsiConsole.MarkupLine("[green]S: moverse hacia abajo[/]");
+      AnsiConsole.MarkupLine("[green]A: moverse hacia la izquierda[/]");
+      AnsiConsole.MarkupLine("[green]S: moverse hacia abajo[/]");
+      AnsiConsole.MarkupLine("[green]H: activar habilidad[/]");
+      AnsiConsole.MarkupLine("[green]Barra Espaciadora: finalizar turno[/]");
+      AnsiConsole.MarkupLine(" ");
+      AnsiConsole.MarkupLine("[green underline]ELEMENTOS DEL MAPA :[/]");
+      AnsiConsole.MarkupLine("[White]Pixel Blaco: paredes[/]");
+      AnsiConsole.MarkupLine("[grey]Pixel Gris: limites del mapa[/]");
+      AnsiConsole.MarkupLine("[blue]Pixel Azul: jugador 1[/]");
+      AnsiConsole.MarkupLine("[red]Pixel Rojo: jugador 2[/]");
+      AnsiConsole.MarkupLine("[Purple]Pixel Morado: sombras[/]");
+      AnsiConsole.MarkupLine(" ");
+      AnsiConsole.MarkupLine("[blue]PERSONAJES (sus habilidades)[/]");
+      AnsiConsole.MarkupLine("[blue]Zara: rompe paredes adyacentes a ella para convertirlas en caminos[/]");
+      AnsiConsole.MarkupLine("[blue]Halvar: intercambia posiciones con el otro jugador sin importar la distancia[/]");
+      AnsiConsole.MarkupLine("[blue]Yuri: consigue entre 5 y 8 pasos adicionales para moverse[/]");
+      AnsiConsole.MarkupLine("[blue]Axton: puede ver las trampas de todo el mapa por 2 segundos[/]");
+      AnsiConsole.MarkupLine("[blue]Lyn: lanza su gancho hacia cualquier direccion que se le indique hasta impactar con algo sin importar la distancia , si es una pared se pegara a esta , si es una sombra la atrapara y si es un jugador lo atraera hacia ella[/]");
+      AnsiConsole.MarkupLine(" ");
+      AnsiConsole.MarkupLine("[green underline]LORE (por si te interesa) :[/]");
+      AnsiConsole.MarkupLine("[yellow]   Un grupo de amigos jovenes se reunen en casa de su amigo Halvar para una pijamada , entre las actividades normales deciden jugar a un recien sacado juego de realidad virtual , es un multijugador pvp entre dos jugadores en el que la suerte y la estrategia son factores clave , deciden probarlo y competir para ver quien gana.[/]");
+      AnsiConsole.MarkupLine("[green underline]Datos sobre el juego :[/]");
+      AnsiConsole.MarkupLine("[White]   El objetivo del juego es ver quien puede conseguir capturar 11 sombras antes que el otro , el mapa esta repleto de trampas que haran que el juego de vueltas todo el tiempo , poniendo la victoria casi que a la suerte.[/]");
+     }
+
      static void victoria(TipoPersonaje personaje)
      {
       Console.Clear();
@@ -112,7 +154,7 @@ class Program
         else if(personaje == TipoPersonaje.Halvar)
         AnsiConsole.MarkupLine("[blue]Halvar: La seriedad y mis ganas de fastidiar son mis armas , ME LLEVO LA VICTORIA![/]");
         else if(personaje == TipoPersonaje.Axton)
-        AnsiConsole.MarkupLine("[orange]Axton: He evitado mas trampas que un ninja , ESTOY EN LA CIMA DE MI JUEGO![/]");
+        AnsiConsole.MarkupLine("[yellow]Axton: He evitado mas trampas que un ninja , ESTOY EN LA CIMA DE MI JUEGO![/]");
         else if(personaje == TipoPersonaje.Yuri)
         AnsiConsole.MarkupLine("[green]Yuri: Supongo que la suerte estuvo de mi lado , HE GANADO CON ESTILO[/]");
         else if(personaje == TipoPersonaje.Lyn)
@@ -126,7 +168,7 @@ class Program
         .LeftJustified()
         .Color(Color.Red));
         AnsiConsole.Write(
-         new FigletText("Cazadores de Zombras")
+         new FigletText("Cazadores de Sombras")
         .LeftJustified()
         .Color(Color.Purple4));
         System.Threading.Thread.Sleep(2000);
