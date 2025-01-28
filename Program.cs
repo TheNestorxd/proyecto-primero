@@ -166,7 +166,7 @@ class Program
       AnsiConsole.MarkupLine("[red]Pixel Rojo: jugador 2[/]");
       AnsiConsole.MarkupLine("[Purple]Pixel Morado: sombras[/]");
       AnsiConsole.WriteLine(" ");
-      AnsiConsole.MarkupLine("[blue underline]PERSONAJES (sus habilidades) :[/]");
+      AnsiConsole.MarkupLine("[green underline]PERSONAJES (sus habilidades) :[/]");
       AnsiConsole.MarkupLine("[blue]Zara: rompe paredes adyacentes a ella para convertirlas en caminos[/]");
       AnsiConsole.MarkupLine("[blue]Halvar: intercambia posiciones con el otro jugador sin importar la distancia[/]");
       AnsiConsole.MarkupLine("[blue]Yuri: consigue entre 5 y 8 pasos adicionales para moverse[/]");
@@ -1918,10 +1918,5 @@ public static class Globales
   public static int puntuacion2 = 0;
 
 }
-
-
                                                                                                                                                             
-}
-
-
-                   
+}                  
