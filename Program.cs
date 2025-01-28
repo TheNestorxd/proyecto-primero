@@ -38,15 +38,13 @@ class Program
         int jugador = 1;
         TipoPersonaje jugadorPersonaje = jugador1Personaje;
         Random numeroAleatorio = new Random();        
-        Casilla[,] Laberinto = new Casilla[Globales.CASILLA_X_SIZE,Globales.CASILLA_Y_SIZE];
+        
         //============instanciando========================
+        Casilla[,] Laberinto = new Casilla[Globales.CASILLA_X_SIZE,Globales.CASILLA_Y_SIZE];
         for (int i = 0; i < Globales.CASILLA_X_SIZE; i++)
         for (int j = 0; j < Globales.CASILLA_Y_SIZE; j++)
         Laberinto[i,j] = new Casilla();                                   
-        //============Creacion del Mapa=========================
-       
-        
-       
+        //============Creacion del Mapa=========================     
         crearMapa(Laberinto);                                                  
         //============Jugabilidad=========================   
         while(Globales.puntuacion1 < 11 && Globales.puntuacion2 < 11)
@@ -168,7 +166,7 @@ class Program
       AnsiConsole.MarkupLine("[red]Pixel Rojo: jugador 2[/]");
       AnsiConsole.MarkupLine("[Purple]Pixel Morado: sombras[/]");
       AnsiConsole.WriteLine(" ");
-      AnsiConsole.MarkupLine("[blue]PERSONAJES (sus habilidades)[/]");
+      AnsiConsole.MarkupLine("[blue underline]PERSONAJES (sus habilidades) :[/]");
       AnsiConsole.MarkupLine("[blue]Zara: rompe paredes adyacentes a ella para convertirlas en caminos[/]");
       AnsiConsole.MarkupLine("[blue]Halvar: intercambia posiciones con el otro jugador sin importar la distancia[/]");
       AnsiConsole.MarkupLine("[blue]Yuri: consigue entre 5 y 8 pasos adicionales para moverse[/]");
@@ -206,7 +204,8 @@ class Program
         else if(personaje == TipoPersonaje.Yuri)
         AnsiConsole.MarkupLine("[green]Yuri: Supongo que la suerte estuvo de mi lado , HE GANADO CON ESTILO[/]");
         else if(personaje == TipoPersonaje.Lyn)
-        AnsiConsole.MarkupLine("[Cyan]Lyn: JAJA , Logico , no habia otro final posible[/]");        
+        AnsiConsole.MarkupLine("[Cyan]Lyn: JAJA , Logico , no habia otro final posible[/]"); 
+        System.Threading.Thread.Sleep(2000);       
      }
 
      static void bienvenida()
@@ -444,7 +443,7 @@ class Program
           else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.limite)
           {
             render(Mapa , false);
-            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            AnsiConsole.MarkupLine("[red]Zara: EJEM........muy duras[/]");
             return Mapa;
           }
           else if(Mapa[posicion_x - 1, posicion_y].tipoCasilla == TipoCasilla.camino)
@@ -468,7 +467,7 @@ class Program
           else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.limite)
           {
             render(Mapa , false);
-            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            AnsiConsole.MarkupLine("[red]Zara: EJEM........muy duras[/]");
             return Mapa;
           }
           else if(Mapa[posicion_x + 1, posicion_y].tipoCasilla == TipoCasilla.camino)
@@ -492,7 +491,7 @@ class Program
           else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.limite)
           {
             render(Mapa , false);
-            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            AnsiConsole.MarkupLine("[red]Zara: EJEM........muy duras[/]");
             return Mapa;
           }
           else if(Mapa[posicion_x, posicion_y - 1].tipoCasilla == TipoCasilla.camino)
@@ -516,7 +515,7 @@ class Program
           else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.limite)
           {
             render(Mapa , false);
-            Console.WriteLine("Zara: Ni siquiera yo puedo derribar estas paredes , mis puños se harian pure");
+            AnsiConsole.MarkupLine("[red]Zara: EJEM........muy duras[/]");
             return Mapa;
           }
           else if(Mapa[posicion_x, posicion_y + 1].tipoCasilla == TipoCasilla.camino)
@@ -1908,8 +1907,8 @@ public static class Globales
 {
   public static int enfriamiento1 = 0;
   public static int enfriamiento2 = 0;
-  public static int CASILLA_X_SIZE = 68;
-  public static int CASILLA_Y_SIZE = 20;
+  public static int CASILLA_X_SIZE = 80;
+  public static int CASILLA_Y_SIZE = 40;
   public static int velocidad = 0;
   public static int velocidadMax1 = 0;
   public static int velocidadMax2 = 0;
