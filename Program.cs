@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.Design;
 using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
+using Spectre.Console.Rendering;
 using CasillaNS;
 using PersonajeNS;
 using System.Reflection.Emit;
@@ -15,8 +16,8 @@ class Program
     public static void Main(string[] args)
     {
         // Variables----------------------------------------------                                                                                  
-
         bienvenida();
+        System.Threading.Thread.Sleep(2000);       
         //=================Audio===================
         using (WaveOutEvent waveOut = new WaveOutEvent())
         {
@@ -25,8 +26,7 @@ class Program
                 waveOut.Init(mp3Reader);
                 waveOut.Play();       
           //============================================
-        
-        menuInfo();
+        menuInicio();
        //=================Menu de inicio=====================
         TipoPersonaje[] bans = new TipoPersonaje[] {  };
         TipoPersonaje jugador1Personaje = menuSeleccion(bans);
@@ -111,8 +111,47 @@ class Program
         return tipoPersonaje;
 }
 
+     static void menuInicio()
+     {
+      
+        bool iniciado = false;
+         while (iniciado == false)
+        {
+          Console.Clear();
+          bienvenida();
+            var highlightStyle = new Style().Foreground(Color.MediumPurple2);
+            var result = AnsiConsole.Prompt(
+            new SelectionPrompt<string>()
+            .PageSize(3)
+            .HighlightStyle(highlightStyle)
+            .Title( "Menú principal")
+            .AddChoices(new[] 
+           {
+            "Jugar",
+            "Ver información",
+            "Salir"
+           })
+           );
+
+            switch (result)
+            {
+                case "Jugar":
+                    iniciado = true;
+                    break;
+                case "Ver información":
+                    menuInfo();
+                    break;
+                case "Salir":
+                Environment.Exit(0);
+                    return;
+            }
+     
+     }
+    }
+
      static void menuInfo()
      {
+      Console.Clear();
       AnsiConsole.MarkupLine("[green underline]CONTROLES :[/]");
       AnsiConsole.MarkupLine("[green]W: moverse hacia arriba[/]");
       AnsiConsole.MarkupLine("[green]S: moverse hacia abajo[/]");
@@ -120,14 +159,14 @@ class Program
       AnsiConsole.MarkupLine("[green]S: moverse hacia abajo[/]");
       AnsiConsole.MarkupLine("[green]H: activar habilidad[/]");
       AnsiConsole.MarkupLine("[green]Barra Espaciadora: finalizar turno[/]");
-      AnsiConsole.MarkupLine(" ");
+      AnsiConsole.WriteLine(" ");
       AnsiConsole.MarkupLine("[green underline]ELEMENTOS DEL MAPA :[/]");
       AnsiConsole.MarkupLine("[White]Pixel Blaco: paredes[/]");
       AnsiConsole.MarkupLine("[grey]Pixel Gris: limites del mapa[/]");
       AnsiConsole.MarkupLine("[blue]Pixel Azul: jugador 1[/]");
       AnsiConsole.MarkupLine("[red]Pixel Rojo: jugador 2[/]");
       AnsiConsole.MarkupLine("[Purple]Pixel Morado: sombras[/]");
-      AnsiConsole.MarkupLine(" ");
+      AnsiConsole.WriteLine(" ");
       AnsiConsole.MarkupLine("[blue]PERSONAJES (sus habilidades)[/]");
       AnsiConsole.MarkupLine("[blue]Zara: rompe paredes adyacentes a ella para convertirlas en caminos[/]");
       AnsiConsole.MarkupLine("[blue]Halvar: intercambia posiciones con el otro jugador sin importar la distancia[/]");
@@ -139,6 +178,14 @@ class Program
       AnsiConsole.MarkupLine("[yellow]   Un grupo de amigos jovenes se reunen en casa de su amigo Halvar para una pijamada , entre las actividades normales deciden jugar a un recien sacado juego de realidad virtual , es un multijugador pvp entre dos jugadores en el que la suerte y la estrategia son factores clave , deciden probarlo y competir para ver quien gana.[/]");
       AnsiConsole.MarkupLine("[green underline]Datos sobre el juego :[/]");
       AnsiConsole.MarkupLine("[White]   El objetivo del juego es ver quien puede conseguir capturar 11 sombras antes que el otro , el mapa esta repleto de trampas que haran que el juego de vueltas todo el tiempo , poniendo la victoria casi que a la suerte.[/]");
+      AnsiConsole.WriteLine("");
+      AnsiConsole.MarkupLine("[purple]Presiona ENTER cuando quieras salir[/]");
+      ConsoleKeyInfo teclaPresionada;
+       do
+       {
+          teclaPresionada = Console.ReadKey(true);
+       }while(teclaPresionada.Key != ConsoleKey.Enter);
+       
      }
 
      static void victoria(TipoPersonaje personaje)
@@ -171,7 +218,6 @@ class Program
          new FigletText("Cazadores de Sombras")
         .LeftJustified()
         .Color(Color.Purple4));
-        System.Threading.Thread.Sleep(2000);
 
      }
 
@@ -1861,7 +1907,7 @@ public static class Globales
 {
   public static int enfriamiento1 = 0;
   public static int enfriamiento2 = 0;
-  public static int CASILLA_X_SIZE = 60;
+  public static int CASILLA_X_SIZE = 68;
   public static int CASILLA_Y_SIZE = 20;
   public static int velocidad = 0;
   public static int velocidadMax1 = 0;
