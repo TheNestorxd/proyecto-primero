@@ -2,8 +2,7 @@
 using System.Security.Cryptography.X509Certificates;
 using Spectre.Console; 
 using Spectre.Console.Rendering;
-using CasillaNS;
-using PersonajeNS;
+using EnumsNS;
 using System.Reflection.Emit;
 using System.Collections;
 using NAudio.Wave;
@@ -85,7 +84,8 @@ class Program
             TipoPersonaje.Yuri,
             TipoPersonaje.Halvar,
             TipoPersonaje.Axton,
-            TipoPersonaje.Lyn
+            TipoPersonaje.Lyn,
+            TipoPersonaje.Mercer
         };
 
         // Filtrar las opciones para excluir los baneados
@@ -147,7 +147,8 @@ class Program
      }
     }
 
-     static void menuInfo()     {
+     static void menuInfo()    
+      {
       Console.Clear();
       AnsiConsole.MarkupLine("[green underline]CONTROLES :[/]");
       AnsiConsole.MarkupLine("[green]W: moverse hacia arriba[/]");
@@ -594,6 +595,40 @@ class Program
       render(Mapa , false);
       Console.WriteLine("la cantidad aumentada fue de : " + cantAumentada);            
     } 
+
+    static void usarHabilidadMercer(Casilla[,]Mapa , int jugador)
+    {
+      int cantSombras = 0;
+      int x = 0;
+      int y = 0;
+      Random numeroAleatorio = new Random();
+
+      for(int j = 1; j < Mapa.GetLength(1) - 1; j++)
+      for(int i = 1; i < Mapa.GetLength(0) - 1; i++)
+      {
+        if(Mapa[i,j].tipoCasilla == TipoCasilla.sombra)
+        {
+          cantSombras ++;
+          Mapa[i,j].tipoCasilla = TipoCasilla.camino;
+        }
+      }
+
+      while(cantSombras > 0)
+      {
+        do
+        {
+          x = numeroAleatorio.Next(1, Mapa.GetLength(0) - 1);
+          y = numeroAleatorio.Next(1, Mapa.GetLength(1) - 1);
+        }while(Mapa[x,y].tipoCasilla != TipoCasilla.camino);
+        Mapa[x,y].tipoCasilla = TipoCasilla.sombra;
+        cantSombras --;
+      }
+      if(jugador == 1)
+      Globales.enfriamiento1 = Globales.enfriamiento1 + 2;
+      if(jugador == 2)
+      Globales.enfriamiento2 = Globales.enfriamiento2 + 2;
+       
+    }
 
     public static Casilla[,] usarHabilidadLyn(Casilla[,] Mapa, int jugador)
     {      
@@ -1633,6 +1668,10 @@ class Program
                 {
                   usarHabilidadLyn(Mapa ,jugador);
                 }
+                 else if(personaje == TipoPersonaje.Mercer)
+                {
+                  usarHabilidadMercer(Mapa ,jugador);
+                }
                 }
                 else if(Globales.enfriamiento2 == 0 && jugador == 2)
                 {
@@ -1655,6 +1694,10 @@ class Program
                 else if(personaje == TipoPersonaje.Lyn)
                 {
                   usarHabilidadLyn(Mapa ,jugador);
+                }
+                else if(personaje == TipoPersonaje.Mercer)
+                {
+                  usarHabilidadMercer(Mapa ,jugador);
                 }
                 }
                 else if(Globales.enfriamiento1 > 0 || Globales.enfriamiento2 > 0)
@@ -1875,6 +1918,10 @@ class Program
          {
            Globales.velocidadMax1 = 10;
          }
+         else if(tipoPersonaje == TipoPersonaje.Mercer)
+         {
+           Globales.velocidadMax1 = 10;
+         }
         }
       if(jugador == 2)
       {
@@ -1897,6 +1944,10 @@ class Program
          else if(tipoPersonaje == TipoPersonaje.Lyn)
          {
            Globales.velocidadMax2 = 10;
+         }
+         else if(tipoPersonaje == TipoPersonaje.Mercer)
+         {
+           Globales.velocidadMax1 = 10;
          }
      }
   }

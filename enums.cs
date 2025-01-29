@@ -1,4 +1,4 @@
-namespace CasillaNS
+namespace EnumsNS
 {
     public enum TipoCasilla
     {
@@ -13,6 +13,17 @@ namespace CasillaNS
         trampateletransportacion,
         sombra,
     }
+
+    public enum TipoPersonaje
+    {
+        Zara,
+        Halvar,
+        Axton,
+        Yuri,
+        Lyn,
+        Mercer,
+    }
+
     public class Casilla
     {
         //Vars
@@ -20,6 +31,8 @@ namespace CasillaNS
                
         
     }
+
+
     
     
 }
