@@ -147,8 +147,7 @@ class Program
      }
     }
 
-     static void menuInfo()
-     {
+     static void menuInfo()     {
       Console.Clear();
       AnsiConsole.MarkupLine("[green underline]CONTROLES :[/]");
       AnsiConsole.MarkupLine("[green]W: moverse hacia arriba[/]");
@@ -305,7 +304,6 @@ class Program
         }
     }
 
-   
     
     static void Dibujar(Casilla[,] Laberinto , bool Axton)
     {
