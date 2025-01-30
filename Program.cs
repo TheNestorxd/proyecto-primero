@@ -12,18 +12,20 @@ namespace Principal
 {
 class Program
 {
+  private static WaveOutEvent waveOut;
     public static void Main(string[] args)
     {
         // Variables----------------------------------------------                                                                                  
         bienvenida();
         System.Threading.Thread.Sleep(2000);       
         //=================Audio===================
-        using (WaveOutEvent waveOut = new WaveOutEvent())
-        {
-            using (Mp3FileReader mp3Reader = new Mp3FileReader("C:/Users/15618/Desktop/Proyecto/musica.mp3"))
-            {
-                waveOut.Init(mp3Reader);
-                waveOut.Play();       
+         string audioFilePath = "C:/Users/15618/Desktop/Proyecto/musica.mp3";
+         waveOut = new WaveOutEvent();
+         var audioFile = new AudioFileReader(audioFilePath);
+
+         waveOut.Init(audioFile);
+         waveOut.PlaybackStopped += OnPlaybackStopped;
+         waveOut.Play();    
           //============================================
         menuInicio();
        //=================Menu de inicio=====================
@@ -70,8 +72,8 @@ class Program
         {
           victoria(jugador2Personaje);
         }
-    }
-  }
+    
+  
 }
                                                                                                                
     //================Metodos de Graficados=============================
@@ -172,6 +174,7 @@ class Program
       AnsiConsole.MarkupLine("[blue]Yuri: consigue entre 5 y 8 pasos adicionales para moverse[/]");
       AnsiConsole.MarkupLine("[blue]Axton: puede ver las trampas de todo el mapa por 2 segundos[/]");
       AnsiConsole.MarkupLine("[blue]Lyn: lanza su gancho hacia cualquier direccion que se le indique hasta impactar con algo sin importar la distancia , si es una pared se pegara a esta , si es una sombra la atrapara y si es un jugador lo atraera hacia ella[/]");
+      AnsiConsole.MarkupLine("[blue]Mercer: reubica todas las sombras del mapa aleatoriamente[/]");
       AnsiConsole.MarkupLine(" ");
       AnsiConsole.MarkupLine("[green underline]LORE (por si te interesa) :[/]");
       AnsiConsole.MarkupLine("[yellow]   Un grupo de amigos jovenes se reunen en casa de su amigo Halvar para una pijamada , entre las actividades normales deciden jugar a un recien sacado juego de realidad virtual , es un multijugador pvp entre dos jugadores en el que la suerte y la estrategia son factores clave , deciden probarlo y competir para ver quien gana.[/]");
@@ -1738,6 +1741,14 @@ class Program
       render(Mapa , false);
     } 
 
+    static void OnPlaybackStopped(object sender, StoppedEventArgs e)
+    {
+      if(waveOut != null)
+      {
+        waveOut.Play();
+      }
+    }
+
      static bool EsConectado(Casilla[,] Mapa)
     {
         int filas = Mapa.GetLength(0);
@@ -1947,7 +1958,7 @@ class Program
          }
          else if(tipoPersonaje == TipoPersonaje.Mercer)
          {
-           Globales.velocidadMax1 = 10;
+           Globales.velocidadMax2 = 10;
          }
      }
   }
