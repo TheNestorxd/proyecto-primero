@@ -8,10 +8,15 @@ namespace EnumsNS
         jugador,
         jugador2,
         caminovisitado,
-        trampaenfriamiento,
-        trampavelocidad,
-        trampateletransportacion,
+        trampa,
         sombra,
+    }
+
+    public enum TipoTrampa
+    {
+        Enfriamiento,
+        Velocidad,
+        Teletransportacion
     }
 
     public enum TipoPersonaje
@@ -24,13 +29,11 @@ namespace EnumsNS
         Mercer,
     }
 
-    public class Casilla
-    {
-        //Vars
-        public TipoCasilla tipoCasilla = TipoCasilla.camino;
-               
-        
-    }
+   public class Casilla
+{
+    public TipoCasilla tipoCasilla = TipoCasilla.camino;
+    public TipoTrampa tipoTrampa { get; set; } 
+}
 
 
     
