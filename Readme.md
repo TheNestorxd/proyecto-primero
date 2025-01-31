@@ -1,19 +1,64 @@
-====================================Composición=================================================================
+# 🕵️♂️ Cazadores de Sombras 🕵️♀️
 
-  Debido a que cuando empeze a crearlo no sabia usar clases , todo el grueso del codigo esta en la clase Program por defecto , aun asi por comentarios he delimitado las secciones del codigo para asi poder hacerlo mas leible. Empezare explicando los metodos principales que lo componen desde el principio hasta el final logicamente:
-- Al iniciar el programa se ejecuta el metodo Bienvenida , el cual simplemente muestra el letrero bonito del inicio del juego , luego de unos 2 segundos comienza la musica y se nos muestra el menu principal.
-- El menu contiene 3 opciones , jugar para iniciar el juego , salir de la app y poder ver la informacion acerca del juego , en esta opcion de ver la info estan explicados los controles del juego , los personajes que se pueden escojer , la leyenda del mapa , una mini historia para inmersion y el objetivo del juego . A esta informacion se puede acceder mientras se juega tambien , de esa forma se quitan las dudas que puedan surgir sobre controles y demas.
-- Habiendo iniciado el juego se empieza a crear el mapa , el mapa es creado por varios metodos que son llamados en orden desde el metodo crearMapa , la composicion es asi : desde que se inicia la app se crea un array bidimensional de elementos de tipo Casilla de una clase externa , los cuales tienen la propiedad de tener un valor del enum TipoCasilla (un enum en donde estan todos los tipos de casilla del mapa) , al inicio el mapa solo tiene caminos , luego se crean sus limites (casillas que son similares a las paredes pero que estan separadas en dos tipos distintos para evitar que puedan ser eliminados o algo asi , los limites deben permanecer siempre) , luego se colocan un numero de paredes establecidos por defecto de forma aleatoria por todo el mapa , luego de colocadas se inicia un metodo DFS que devuelve un valor booleano (el metodo se encarga de verificar si todos los caminos estan conectados entre si , si lo estan devuelve true , sino false) , si todas las casillas camino estan conectadas se sigue el proceso de creacion , sino se vuelve a crear el mapa desde cero hasta que sea true , luego de esa verificacion se colocan los dos jugadores en el mapa aleatoriamente , las trampas aleatoriamente en una cantidad por defecto y las sombras (puntos para la victoria) aleatorio y cant por defecto.
-- Luego de creado el mapa por completo se muestra en pantalla , de la parte visual se encarga la libreria Spectre.Console , yo elegi mostrarlo atravez de un canvas (informacion de este en la libreria) , el metodo que lo muestra se llama render , este lo que hace es limpiar la consola cada vez que se llama y luego mostrar todo lo visual.
-- La jugabilidad es por turnos hasta que se cumpla la condicion de victoria en alguno de estos , la jugabilidad la cree asi : tengo un metodo llamado jugarTurno el cual tiene todo lo que tiene que ver con establecer la cantidad de pasos del turno , la movilidad y uso de los controles ha atravez de un ReadKey y un switch . Este metodo recibe como parametros el mapa del juego , el jugador dueño del turno y el tipo de personaje que usa , para el cambio de turnos pues esta implementado que este metodo termine al presionar la barra espaciadora , la llamada a este metodo esta dentro de un while que se ejecuta siempre que ninguno de los dos haya cumplido la condicion de victoria , al terminar este metodo se cambian los parametros para que asi se alterne entre el jugador 1 y el dos.
-- Al cumplirse la condicion de victoria se quita el mapa y se muestra el mensaje de victoria hasta cerrarse el juego en unos segundos.
+¡Un juego de estrategia y suerte donde dos jugadores compiten por capturar sombras en un laberinto lleno de trampas! Desarrollado en C# con la consola como campo de batalla.
 
-=========detalles sobre su suncionamiento=========================
 
-  El funcionamiento esta compuesto por lo siguiente:
-- metdos estaticos que implementan las funciones de la app.
-- variables tanto locales especificas de cada metodo como globales que comparten varios de estos (ejemplos : enfriamiento de cada jugador , su velocidad maxima)
-- dos enums que contienen los diferentes tipos de casillas que componen al mapa y el otro los personajes. La funcionalidad y propiedades de cada uno de los elementos de dichos enums se las dan los diversos metodos a travez de condicionales.
-- el juego fue hecho puramente en consola , la forma de "moverse" por el mapa consiste en ir cambiando los elementos del array que contiene el mapa , cada vez que ocurre un cambio se llama al metodo render para que limpie la consola e imprima todo actualizado , por esta razon es que cada vez que se realiza alguna accion como moverse y demas se pueden ver "pestañazos" debido a que se elimina todo y se vuelve a imprimir.
-- la musica inicia desde que se muestra el menu inicial hasta que se cierra la app , fue posible implementarla a travez de la libreria NAudio , hasta ahora no esta implementado que se repita al terminar , por lo que si la musica llega a su fin antes que el cierre del programa , este se quedara sin sonido. 
 
+---
+
+## 🎮 **¿De qué trata?**
+Eres uno de dos cazadores en un laberinto generado aleatoriamente. Tu objetivo es **capturar más sombras que tu oponente** antes de que se agoten los turnos. Pero cuidado: el mapa está plagado de trampas que pueden cambiar el rumbo del juego en segundos.
+
+**¡La suerte y la estrategia serán tus mejores aliados!**
+
+---
+
+## ✨ **Características principales**
+- 🔄 **Laberintos aleatorios**: Cada partida es única.
+- 🎭 **6 personajes con habilidades únicas**: Rompe paredes, teletranspórtate,  reubica sombras, etc.
+- ⚡ **Trampas dinámicas**: Congelación, teletransporte, generadores de sombras, y más.
+- 🎨 **Interfaz colorida**: Gráficos en consola con `Spectre.Console`.
+- 🎵 **Música ambiental**: Ambiente inmersivo con efectos de audio.
+
+---
+
+# 🛠️ Pasos detallados para instalar y jugar
+
+### 1. **Descargar el repositorio**
+   - **Opción A**: Clonar con Git  
+     ```bash
+     git clone https://github.com/tu-usuario/cazadores-de-sombras.git
+     ```  
+   - **Opción B**: Descargar manualmente  
+     *Ve al repositorio en GitHub → "Code" → "Download ZIP".*  
+     *Extrae el archivo ZIP en una carpeta de tu elección.*
+
+---
+
+### 2. **Instalar requisitos previos**
+   - **.NET 8.0 SDK**:  
+     Descárgalo desde [dotnet.microsoft.com](https://dotnet.microsoft.com/download/dotnet/8.0).  
+     *Sigue las instrucciones para tu sistema operativo (Windows, macOS, Linux).*
+
+---
+
+### 3. **Restaurar dependencias**
+   Abre una terminal en la carpeta del proyecto y ejecuta:  
+   ```bash
+   dotnet restore
+
+   5. Iniciar el juego
+Ejecuta en la terminal:
+
+bash
+Copy
+dotnet run
+¡Listo! El menú principal aparecerá y podrás empezar a jugar 🎮.
+
+🔧 Solucionar problemas comunes
+
+Errores de compilación:
+Verifica que tienes .NET 8.0 instalado con dotnet --version.
+
+Pantalla parpadeante:
+Es normal: la consola se redibuja constantemente para actualizar el mapa.
