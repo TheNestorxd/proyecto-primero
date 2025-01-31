@@ -41,13 +41,12 @@ Copy
 + Mercer :: Reubica todas las sombras
 
 🧨 Trampas traicioneras
-diff
 Icono	Tipo	Efecto
-🧊	Enfriamiento	Aumenta tu enfriamiento
-💫	Teletransportación	Te envía a coordenadas aleatorias
-🩸	Fuga	Pierdes 1 sombra
-🌀	Generador	Crea 2 sombras nuevas
-⚡  Parálisis	Bloquea tu turno
+🧊	 Enfriamiento	       Aumenta tu enfriamiento
+💫	 Teletransportación	 Te envía a coordenadas aleatorias
+🩸	 Fuga               	Pierdes 1 sombra
+🌀 	Generador	          Crea 2 sombras nuevas
+⚡  Parálisis	          Bloquea tu turno
 
 💡 Consejos pro
 Si el parpadeo es molesto:
