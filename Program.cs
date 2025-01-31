@@ -13,16 +13,18 @@ namespace Principal
 class Program
 {
   private static WaveOutEvent waveOut;
+  private static AudioFileReader audioFile;
     public static void Main(string[] args)
     {
-        // Variables---------------------------------------------- 
         Console.Clear();                                                                                 
         bienvenida();
         System.Threading.Thread.Sleep(2000);       
         //=================Audio===================
+        
          string audioFilePath = "C:/Users/15618/Desktop/Proyecto/musica.mp3";
          waveOut = new WaveOutEvent();
          var audioFile = new AudioFileReader(audioFilePath);
+         audioFile = new AudioFileReader(audioFilePath);
 
          waveOut.Init(audioFile);
          waveOut.PlaybackStopped += OnPlaybackStopped;
@@ -1347,12 +1349,13 @@ class Program
     } 
 
     static void OnPlaybackStopped(object sender, StoppedEventArgs e)
+{
+    if (waveOut != null && e.Exception == null) // Solo si no hay error
     {
-      if(waveOut != null)
-      {
+        audioFile.Position = 0; // Reiniciar la posición del audio
         waveOut.Play();
-      }
     }
+}
 
      static bool EsConectado(Casilla[,] Mapa)
     {
