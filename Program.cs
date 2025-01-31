@@ -27,7 +27,6 @@ class Program
          audioFile = new AudioFileReader(audioFilePath);
 
          waveOut.Init(audioFile);
-         waveOut.PlaybackStopped += OnPlaybackStopped;
          waveOut.Play();    
           //============================================
         menuInicio();
@@ -1347,15 +1346,6 @@ class Program
       colocarSombras(Mapa , 30);
       render(Mapa , false);
     } 
-
-    static void OnPlaybackStopped(object sender, StoppedEventArgs e)
-{
-    if (waveOut != null && e.Exception == null) // Solo si no hay error
-    {
-        audioFile.Position = 0; // Reiniciar la posición del audio
-        waveOut.Play();
-    }
-}
 
      static bool EsConectado(Casilla[,] Mapa)
     {
