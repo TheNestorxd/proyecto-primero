@@ -30,9 +30,8 @@ Acción	Tecla	Efecto
  - **Menú de ayuda**	       Esc
 
 
-🦸 Tu arsenal de personajes
+## 🦸 Tu arsenal de personajes
 diff
-Copy
 + Zara   :: Rompe paredes adyacentes
 + Halvar :: Intercambia lugares con el rival
 + Yuri   :: +5-8 movimientos extras
@@ -40,13 +39,13 @@ Copy
 + Lyn    :: Gancho de larga distancia
 + Mercer :: Reubica todas las sombras
 
-🧨 Trampas traicioneras
+## 🧨 Trampas traicioneras
 Icono	Tipo	Efecto
-🧊	Enfriamiento	Aumenta tu enfriamiento
-💫	Teletransportación	Te envía a coordenadas aleatorias
-🩸	Fuga	Pierdes 1 sombra
-🌀	Generador	Crea 2 sombras nuevas
-⚡  Parálisis	Bloquea tu turno
+- 🧊	 Enfriamiento	       Aumenta tu enfriamiento
+- 💫	 Teletransportación	 Te envía a coordenadas aleatorias
+- 🩸	 Fuga               	Pierdes 1 sombra
+- 🌀 	Generador	          Crea 2 sombras nuevas
+- ⚡  Parálisis	          Bloquea tu turno
 
 💡 Consejos pro
 Si el parpadeo es molesto:
@@ -80,7 +79,6 @@ Si el parpadeo es molesto:
 Ejecuta en la terminal:
 
   bash
-  Copy
   dotnet run
   ¡Listo! El menú principal aparecerá y podrás empezar a jugar 🎮.
 
