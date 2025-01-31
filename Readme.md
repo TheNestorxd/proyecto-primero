@@ -41,6 +41,7 @@ Copy
 + Mercer :: Reubica todas las sombras
 
 🧨 Trampas traicioneras
+diff
 Icono	Tipo	Efecto
 🧊	Enfriamiento	Aumenta tu enfriamiento
 💫	Teletransportación	Te envía a coordenadas aleatorias
