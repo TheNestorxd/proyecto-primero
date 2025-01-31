@@ -16,7 +16,9 @@ namespace EnumsNS
     {
         Enfriamiento,
         Velocidad,
-        Teletransportacion
+        Teletransportacion,
+        Fuga,
+        Generador
     }
 
     public enum TipoPersonaje
