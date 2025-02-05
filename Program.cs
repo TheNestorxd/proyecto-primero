@@ -21,11 +21,10 @@ class Program
         System.Threading.Thread.Sleep(2000);       
         //=================Audio===================
         
-         string audioFilePath = "C:/Users/15618/Desktop/Proyecto/musica.mp3";
+         string audioFilePath = Path.Combine("bin/Debug/net8.0/Resources/musica.mp3");
+         
          waveOut = new WaveOutEvent();
          var audioFile = new AudioFileReader(audioFilePath);
-         audioFile = new AudioFileReader(audioFilePath);
-
          waveOut.Init(audioFile);
          waveOut.Play();    
           //============================================

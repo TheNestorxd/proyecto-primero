@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj": {}
+    "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj": {}
   },
   "projects": {
-    "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj": {
+    "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj",
+        "projectUniqueName": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj",
         "projectName": "Proyecto",
-        "projectPath": "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj",
+        "projectPath": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj",
         "packagesPath": "C:\\Users\\15618\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\15618\\Desktop\\Proyecto\\obj\\",
+        "outputPath": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\15618\\AppData\\Roaming\\NuGet\\NuGet.Config"

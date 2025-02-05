@@ -78,7 +78,6 @@ Si el parpadeo es molesto:
 ### 4. **Iniciar el juego**
 Ejecuta en la terminal:
 
-  bash
   dotnet run
   ¡Listo! El menú principal aparecerá y podrás empezar a jugar 🎮.
 

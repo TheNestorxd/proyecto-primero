@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bIp5fLQpTto=",
+  "dgSpecHash": "mDemNnhS48k=",
   "success": true,
-  "projectFilePath": "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj",
+  "projectFilePath": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\15618\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\15618\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
@@ -21,12 +21,5 @@
     "C:\\Users\\15618\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\8.0.11\\microsoft.aspnetcore.app.ref.8.0.11.nupkg.sha512",
     "C:\\Users\\15618\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\8.0.11\\microsoft.netcore.app.host.win-x64.8.0.11.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    }
-  ]
+  "logs": []
 }

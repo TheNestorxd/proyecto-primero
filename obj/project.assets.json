@@ -550,11 +550,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj",
+      "projectUniqueName": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj",
       "projectName": "Proyecto",
-      "projectPath": "C:\\Users\\15618\\Desktop\\Proyecto\\Proyecto.csproj",
+      "projectPath": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\Proyecto.csproj",
       "packagesPath": "C:\\Users\\15618\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\15618\\Desktop\\Proyecto\\obj\\",
+      "outputPath": "C:\\Users\\15618\\Desktop\\Proyectos\\Proyecto Laberinto\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\15618\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -637,13 +637,5 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.101/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1900",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Error occurred while getting package vulnerability data: Unable to load the service index for source https://api.nuget.org/v3/index.json."
-    }
-  ]
+  }
 }
