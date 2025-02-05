@@ -53,6 +53,10 @@ Si el parpadeo es molesto:
 
 # 🛠️ Pasos detallados para instalar y jugar
 
+### Aviso importante :
+- Si eres usuario de Linux , ve al program.cs , abrelo y en el metodo main encontraras un espacio que dice entre comentarios ========Audio==========
+- Comenta todo lo que esta entre esas lineas , ya que el Naudio encargado de reproducir la musica no tiene version para Linux , asi que lo siento , tendras que jugarlo sin musica.
+
 ### 1. **Descargar el repositorio**
    - **Opción A**: Clonar con Git  
      ```bash
