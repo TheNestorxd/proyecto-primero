@@ -21,10 +21,10 @@ class Program
         System.Threading.Thread.Sleep(2000);       
         //=================Audio===================
         
-        string audioFilePath = Path.Combine("bin/Debug/net8.0/Resources/musica.mp3");
+        string audioFilePath = Path.Combine("bin" , "Debug" , "net8.0" , "Resources" , "musica.mp3");
         if (!File.Exists(audioFilePath))
         {
-          audioFilePath = Path.Combine("Resources/musica.mp3");
+          audioFilePath = Path.Combine("Resources" , "musica.mp3");
         }
          
          waveOut = new WaveOutEvent();
